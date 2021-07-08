@@ -22,10 +22,10 @@ const grabName = async () => {
 // Grab LIGO flavor
 const grabFlavor = async () => {
   const availFlavors: {[x in LIGOFlavors]: string} = {
-    [LIGOFlavors.PascalLIGO]: "PascaLIGO",
-    [LIGOFlavors.CamelLIGO]: "CameLIGO",
+    [LIGOFlavors.PascaLIGO]: "PascaLIGO",
+    [LIGOFlavors.CameLIGO]: "CameLIGO",
     [LIGOFlavors.ReasonLIGO]: "ReasonLIGO",
-    [LIGOFlavors.JSLIGO]: "JSLIGO"
+    [LIGOFlavors.JsLIGO]: "JsLIGO"
   };
 
   const res = await prompt([{

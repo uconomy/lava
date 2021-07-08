@@ -1,12 +1,12 @@
 export enum LIGOFlavors {
-  PascalLIGO = 'pascaligo',
-  CamelLIGO = 'cameligo',
+  PascaLIGO = 'pascaligo',
+  CameLIGO = 'cameligo',
   ReasonLIGO = 'reasonligo',
-  JSLIGO = 'jsligo',
+  JsLIGO = 'jsligo',
 }
 
 export class ConfigFile {
   contractName: string = "UntitledContract";
-  ligoFlavor: LIGOFlavors = LIGOFlavors.PascalLIGO;
+  ligoFlavor: LIGOFlavors = LIGOFlavors.PascaLIGO;
 
 }
