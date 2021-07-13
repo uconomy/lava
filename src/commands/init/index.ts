@@ -1,3 +1,4 @@
+import { Command } from 'commander';
 import inquirer from 'inquirer';
 import { em } from "../../console";
 import { ConfigFile, LIGOFlavors } from '../../modules/configfile';
@@ -38,6 +39,15 @@ const grabFlavor = async () => {
 
   config.ligoFlavor = res.ligoFlavor;
 };
+
+export const addInitCommand = (program: Command) => {
+  program
+    .command('init')
+    .description('Starts a small configuration utility to create a new smart contract repo.')
+    .action((source, destination) => {
+      init();
+    });
+}
 
 // Full init command controller
 export const init = async () => {

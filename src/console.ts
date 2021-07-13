@@ -1,6 +1,14 @@
 import chalk from 'chalk';
 
-export const info = console.log;
+let debugFlag = false;
+export const setDebug =(_debug: boolean) => 
+  debugFlag = _debug;
+
+export const log = (...args: any[]) => 
+  debugFlag && console.log(chalk.cyan`${args.join(' ')}`);
+
+export const info = (...args: any[]) => 
+  console.log(chalk.white`${args.join(' ')}`);
 
 export const em = (...args: any[]) => 
   console.log(chalk.greenBright`${args.join(' ')}`);
