@@ -1,4 +1,4 @@
-import { Bundle } from "../../../bundle"
+import { Bundle } from "../../../modules/bundle"
 
 export const makePackageJSON = (bundle: Bundle) => ({
   name: bundle.domainName,

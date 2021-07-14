@@ -1,23 +1,25 @@
 import { Command } from 'commander';
 import inquirer from 'inquirer';
-import { em } from "../../console";
-import { ConfigFile, LIGOFlavors } from '../../modules/configfile';
+import { em, getCWD } from "../../console";
+import { Config, ConfigFile, defaultConfig } from '../../modules/bundle';
+import { LIGOFlavors } from '../../modules/ligo';
 import { makeContractBundle } from './contract-bundle';
 
 // Specifically instance a new Inquirer prompt
 const prompt = inquirer.createPromptModule();
 
-const config = new ConfigFile();
+// Prepare our "empty" config
+const config: Config = defaultConfig;
 
-// Grab contract name
+// Grab repository name
 const grabName = async () => {
   const res = await prompt([{
     type: "input",
-    name: "contractName",
-    message: "What will be the name of the contract?"
+    name: "repoName",
+    message: "What will be the name of the repository?"
   }]);
 
-  config.contractName = res.contractName;
+  config.repoName = res.repoName;
 };
 
 // Grab LIGO flavor
@@ -31,19 +33,19 @@ const grabFlavor = async () => {
 
   const res = await prompt([{
     type: "list",
-    default: config.ligoFlavor,
+    default: defaultConfig.preferredLigoFlavor,
     choices: Object.keys(availFlavors).map(value => ({ name: availFlavors[value as LIGOFlavors], value })),
-    name: "ligoFlavor",
+    name: "preferredLigoFlavor",
     message: "What LIGO flavor do you prefer to write your contract with?"
   }]);
 
-  config.ligoFlavor = res.ligoFlavor;
+  config.preferredLigoFlavor = res.preferredLigoFlavor;
 };
 
 export const addInitCommand = (program: Command) => {
   program
     .command('init')
-    .description('Starts a small configuration utility to create a new smart contract repo.')
+    .description('starts a small configuration utility to create a new smart contract repo.')
     .action((source, destination) => {
       init();
     });
@@ -53,18 +55,14 @@ export const addInitCommand = (program: Command) => {
 export const init = async () => {
   em`Welcome, let's create your Tezos smart-contract!\n\n`;
 
-  // await makeContractBundle({
-  //   basePath: process.cwd() + '/tezt',
-  //   name: 'My Test Contract'
-  // });
-
   await grabName();
   await grabFlavor();
 
   // console.log(JSON.stringify(config, null, 2));
 
   await makeContractBundle({
-    basePath: process.cwd(),
-    name: config.contractName,
+    basePath: getCWD(),
+    name: config.repoName,
+    config,
   });
 };

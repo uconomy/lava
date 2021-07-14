@@ -1,20 +1,20 @@
-import { Bundle } from "../../../bundle";
+import { Bundle, Config } from "../../../modules/bundle";
 import { makeAccounts } from "./make-accounts";
 import { makePackageJSON } from "./make-package.json";
 import { makeREADME } from "./make-readme";
 
 export type ContractBundleOptions = {
   basePath: string;
-  name: string;
+  config: Config;
 };
 
 export const makeContractBundle = async (params: ContractBundleOptions) => {
   const {
     basePath,
-    name,
+    config,
   } = params;
 
-  const bundle = new Bundle(name, basePath);
+  const bundle = new Bundle(config.repoName, basePath);
 
   // .gitignore
   await bundle.writeTextFile('.gitignore', "build\nnode_modules\npackage-lock.json");

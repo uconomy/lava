@@ -1,5 +1,6 @@
 import { spawn, execSync } from "child_process";
 import { em, error, info, log } from "../../console";
+import { defaultConfig } from "../bundle";
 import { TezosProtocols } from "../tezos";
 import { createAccountsParams, createProtocolParams, flextesaProtocols } from "./parameters";
 import { FlextesaOptions } from "./types";
@@ -10,12 +11,7 @@ try {
 } catch (err) {}
 
 const defaultProtocol = TezosProtocols.FLORENCE;
-const defaultOPtions: FlextesaOptions = {
-  host: "0.0.0.0",
-  port: 20000,
-  protocol: defaultProtocol,
-  genesisBlockHash: "random"
-};
+const defaultOptions: FlextesaOptions = defaultConfig.sandbox;
 
 // This is to avoid printing flextesa full-console in output
 const startLine = "Flextesa: Please enter command:";
@@ -26,7 +22,7 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>) => {
   info`Preparing Flextesa sandbox...`;
 
   // Merge with defaults
-  const options = Object.assign({}, defaultOPtions, _options);
+  const options = Object.assign({}, defaultOptions, _options);
 
   // Localhost is not a valid host for Docker
   const host = options.host === "localhost" ? "0.0.0.0" : options.host;

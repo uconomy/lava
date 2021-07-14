@@ -1,8 +1,12 @@
 import chalk from 'chalk';
 
 let debugFlag = false;
-export const setDebug =(_debug: boolean) => 
+export const setDebug = (_debug: boolean) => 
   debugFlag = _debug;
+
+let cwd = process.cwd()
+export const setCWD = (_cwd: string) => cwd = _cwd;
+export const getCWD = () => cwd;
 
 export const log = (...args: any[]) => 
   debugFlag && console.log(chalk.cyan`${args.join(' ')}`);

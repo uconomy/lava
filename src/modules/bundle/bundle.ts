@@ -22,6 +22,15 @@ export const mkdir = async (path: string): Promise<true> =>
     fs.mkdir(path, (err) => err ? reject(err) : resolve(true));
   });
 
+export const listFiles = async (path: string, options?: BufferEncoding | {
+  encoding: BufferEncoding | null;
+  withFileTypes?: false | undefined;
+}) => new Promise((resolve, reject) => {
+  fs.readdir(path, options, (err, files) => {
+    err ? reject(err) : resolve(files);
+  });
+});
+
 export const makeDomainName = (name: string) => (
   name.toLocaleLowerCase().replace(/\s/g, '-') // TODO: Remove non alphanumeric chars replace(//g, '')
 );
@@ -52,23 +61,27 @@ export class Bundle {
     return path.join(this.basePath, name);
   }
 
-  writeTextFile(filePath: string, data: string, encoding: BufferEncoding = 'utf-8') {
+  async writeTextFile(filePath: string, data: string, encoding: BufferEncoding = 'utf-8') {
     return writeTextFile(this.getPath(filePath), data, encoding);
   }
 
-  readTextFile(filePath: string, data: string, encoding: BufferEncoding = 'utf-8') {
+  async readTextFile(filePath: string, data: string, encoding: BufferEncoding = 'utf-8') {
     return readTextFile(this.getPath(filePath), encoding);
   }
 
-  writeJSONFile(filePath: string, data: any, beautify: boolean = true) {
+  async writeJSONFile(filePath: string, data: any, beautify: boolean = true) {
     return writeJSONFile(this.getPath(filePath), data, beautify);
   }
 
-  readJSONFile(filePath: string) {
+  async readJSONFile(filePath: string) {
     return readJSONFile(this.getPath(filePath));
   }
 
-  makeDir(folderPath: string) {
+  async makeDir(folderPath: string) {
     return mkdir(this.getPath(folderPath));
+  }
+
+  async listFiles(folderPath: string) {
+    return listFiles(this.getPath(folderPath));
   }
 }

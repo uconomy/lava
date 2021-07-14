@@ -1,4 +1,4 @@
-import { Bundle } from "../../../bundle";
+import { Bundle } from "../../../modules/bundle";
 
 export const makeAccounts = (bundle: Bundle) => 
 `module.exports = {

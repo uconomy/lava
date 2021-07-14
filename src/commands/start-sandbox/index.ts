@@ -6,8 +6,7 @@ import { startFlextesa } from "../../modules/flextesa";
 export const addStartSandboxCommand = (program: Command) => {
   program
     .command('start-sandbox')
-    .description('Create a local Flextesa Tezos test network.')
-      .option('--debug', 'Run the command in debug mode, with a lot more details about it')
+    .description('create a local Flextesa Tezos test network.')
       .option('-h, --host <host>', 'Sandbox hostname')
       .option('-p, --port <port>', 'Sandbox port')
       .option('-P, --protocol <protocol>', 'What Tezos protocol will this Sanbox run')

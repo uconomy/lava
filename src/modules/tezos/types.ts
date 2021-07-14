@@ -5,3 +5,12 @@ export enum TezosProtocols {
   FLORENCE = 'florence',
   GRANADA = 'granada',
 }
+
+export type FaucetAccount = {
+  mnemonic: string[15];
+  secret: string;
+  amount: string; // mutez
+  pkh: string;
+  password: string;
+  email: string;
+};
