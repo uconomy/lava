@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 
-import { em, debug, setDebug, getCWD } from "../../console";
+import { em, debug, getCWD } from "../../console";
 import { ContractsBundle } from '../../modules/bundle';
 import { startFlextesa } from "../../modules/flextesa";
 
