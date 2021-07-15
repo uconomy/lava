@@ -5,11 +5,6 @@ import { TezosProtocols } from "../tezos";
 import { createAccountsParams, createProtocolParams, flextesaProtocols } from "./parameters";
 import { FlextesaOptions } from "./types";
 
-let accounts = [];
-try {
-  accounts = require("../sandbox/accounts");
-} catch (err) {}
-
 const defaultProtocol = TezosProtocols.FLORENCE;
 const defaultOptions: FlextesaOptions = defaultConfig.sandbox;
 
@@ -33,7 +28,7 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>) => {
     ? defaultProtocol
     : options.protocol;
 
-  const accountsParams = createAccountsParams([]);
+  const accountsParams = createAccountsParams(options.accounts || {});
   const tezosNodeParams = createProtocolParams(protocol);
 
   const args = [

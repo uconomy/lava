@@ -14,6 +14,13 @@ export type Config = {
     port: number;
     protocol: TezosProtocols;
     genesisBlockHash: string; // the actual hash or "random" to let Flextesa find one randomly
+    accounts: {
+      [accountName: string]: {
+        pkh: string;
+        sk: string;
+        pk: string;
+      };
+    }
   };
 
   /**
@@ -27,7 +34,7 @@ export type Config = {
    */
   networks: {
     sandbox: { // Sandbox network settings; host and port are not required as we can derive from sandbox config
-      defaultSignerPK: string;
+      defaultSignerSK: string; // Default Tezos' actions signer, used to deploy contract and later interact with it
     },
 
     testnet: { // Remember you need to pass --testnet to test or deploy commands to run on this network

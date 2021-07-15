@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 
-import { em, debug, setDebug } from "../../console";
+import { em, debug, setDebug, getCWD } from "../../console";
+import { ContractsBundle } from '../../modules/bundle';
 import { startFlextesa } from "../../modules/flextesa";
 
 export const addStartSandboxCommand = (program: Command) => {
@@ -19,12 +20,16 @@ export const addStartSandboxCommand = (program: Command) => {
 // Full start-sandbox command controller
 export const startSandbox = async (options: any) => {
   em(`Starting Tezos sandbox...\n`);
-  
-  const { debug, ...commandOptions } = options;
-  setDebug(debug);
 
   // Debug options code
   debug(JSON.stringify(options, null, 2));
 
-  startFlextesa(commandOptions);
+  // Read configfile
+  const contractsBundle = new ContractsBundle(getCWD());
+  const config = await contractsBundle.readConfigFile();
+
+  // Build final options
+  const flextesaOptions = Object.assign({}, config.sandbox, options);
+
+  startFlextesa(flextesaOptions);
 };

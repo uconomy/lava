@@ -3,9 +3,13 @@ import { defaultConfig } from "./defaults";
 import { Config } from "./types";
 
 export class ConfigFile {
-  config: Config = defaultConfig;
+  config: Config;
 
-  getName() {
+  constructor(config = defaultConfig) {
+    this.config = config;
+  }
+
+  static getName() {
     return "config.json";
   }
 
@@ -19,13 +23,5 @@ export class ConfigFile {
     if (!validLigoFlavors.includes(this.config.preferredLigoFlavor)) {
       throw new Error("Invalid preferred LIGO flavor (preferredLigoFlavor). Valid values are " + validLigoFlavors.join(","));
     }
-  }
-
-  parseFrom(data: string) {
-    this.config = JSON.parse(data);
-  }
-
-  toDataString() {
-    return JSON.stringify(this.config, null, 2);
   }
 }

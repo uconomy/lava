@@ -1,5 +1,5 @@
 import { TezosProtocols } from "../tezos";
-import { FlextesaTezosProtocol, FlextesaTezosProtocols } from "./types";
+import { FlextesaAccounts, FlextesaTezosProtocol, FlextesaTezosProtocols } from "./types";
 
 export const flextesaProtocols: FlextesaTezosProtocols = {
   [TezosProtocols.CARTHAGE]: { hash: "PsCARTHAGazKbHtnKfLzQg3kms52kSRpgnDY982a9oYsSXRLQEb", prefix: "006-PsCARTHA", kind: "Carthage" },
@@ -37,7 +37,7 @@ export const createProtocolParams = (tezosProtocol: TezosProtocols): string[] =>
 // tezos-client --endpoint http://localhost:20000 list known addresses
 // tezos-client --endpoint http://localhost:20000 transfer 1.00 from alice to alice
 // tezos-client --endpoint http://localhost:20000 bake for alice
-export const createAccountsParams = (accounts: any[], amountTz: number = 100): string[] => {
+export const createAccountsParams = (accounts: FlextesaAccounts, amountTz: number = 100): string[] => {
   const balance: number = amountTz * 10^9; // XTZ in mutez
   const params: string[] = [];
 

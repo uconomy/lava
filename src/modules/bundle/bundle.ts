@@ -14,7 +14,7 @@ export const readTextFile = async (path: string, encoding: BufferEncoding = 'utf
 export const writeJSONFile = async (path: string, data: any, beautify: boolean = true) => 
   writeTextFile(path, beautify ? JSON.stringify(data, null, 2) : JSON.stringify(data));
 
-export const readJSONFile = async (path: string): Promise<any> =>
+export const readJSONFile = async <T = any>(path: string): Promise<T> =>
   JSON.parse(await readTextFile(path));
 
 export const mkdir = async (path: string): Promise<true> => 
@@ -31,30 +31,28 @@ export const listFiles = async (path: string, options?: BufferEncoding | {
   });
 });
 
-export const makeDomainName = (name: string) => (
-  name.toLocaleLowerCase().replace(/\s/g, '-') // TODO: Remove non alphanumeric chars replace(//g, '')
-);
+export const createBundle = async (folder: string, basePath: string): Promise<Bundle> => {
+  if (!fs.existsSync(basePath))
+    throw new Error("Invalid base path provided for creating Bundle: folder does not exist.");
 
+  const bundleBasePath = path.join(basePath, folder);
+  
+  if (fs.existsSync(bundleBasePath))
+    throw new Error("A folder with that name already exists!");
+
+  await mkdir(bundleBasePath);
+
+  return new Bundle(bundleBasePath);
+};
 
 export class Bundle {
-  readonly name: string;
-  readonly domainName: string;
   readonly basePath: string;
 
-  constructor(name: string, basePath: string = process.cwd()) {
-    this.name = name;
-    this.domainName = makeDomainName(name);
+  constructor(basePath: string = process.cwd()) {
     this.basePath = basePath;
 
     if (!fs.existsSync(basePath))
       throw new Error("Invalid base path provided to Bundle: folder does not exist.");
-
-    this.basePath = path.join(basePath, this.domainName);
-
-    if (fs.existsSync(this.basePath))
-      throw new Error("Bundle complete path (base path + name) already exists.");
-
-    fs.mkdirSync(this.basePath);
   }
 
   getPath(name: string) {
@@ -73,8 +71,12 @@ export class Bundle {
     return writeJSONFile(this.getPath(filePath), data, beautify);
   }
 
-  async readJSONFile(filePath: string) {
-    return readJSONFile(this.getPath(filePath));
+  async readJSONFile<T>(filePath: string) {
+    return readJSONFile<T>(this.getPath(filePath));
+  }
+
+  exists(path: string) {
+    return fs.existsSync(this.getPath(path));
   }
 
   async makeDir(folderPath: string) {

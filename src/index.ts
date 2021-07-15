@@ -10,12 +10,11 @@ program
   .version("0.0.1")
   .option('--debug', 'run the command in debug mode, with a lot more details about it')
   .option('-f, --folder <cwd>', 'change the working directory to the specified folder')
+  .parse();
 
 addInitCommand(program);
 addStartSandboxCommand(program);
 addCompileCommand(program);
-
-program.parse(process.argv);
 
 const globalOptions = program.opts();
 
@@ -27,4 +26,6 @@ if (globalOptions.folder) {
   debug(`Change working directory to ${globalOptions.folder}`);
   setCWD(globalOptions.folder);
 }
+
+program.parse(process.argv);
 

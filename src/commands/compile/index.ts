@@ -15,9 +15,6 @@ export const addCompileCommand = (program: Command) => {
 // Full start-sandbox command controller
 export const compile = async (options: any) => {
   em(`Compiling contracts...\n`);
-  
-  const { debug, ...commandOptions } = options;
-  setDebug(debug);
 
   // Debug options code
   debug(JSON.stringify(options, null, 2));

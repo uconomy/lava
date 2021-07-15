@@ -1,7 +1,5 @@
-import { Bundle } from "../../../modules/bundle";
-
-export const makeREADME = (bundle: Bundle) =>
-`# ${bundle.name}
+export const makeREADME = (name: string) =>
+`# ${name}
 
 ## Preparation
 To start using this contract, make sure you have all the needed packages to run it. To do so, in your Terminal just type:

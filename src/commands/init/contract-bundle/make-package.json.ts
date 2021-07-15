@@ -1,9 +1,7 @@
-import { Bundle } from "../../../modules/bundle"
-
-export const makePackageJSON = (bundle: Bundle) => ({
-  name: bundle.domainName,
+export const makePackageJSON = (name: string) => ({
+  name,
   version: "0.0.1",
-  description: `${bundle.name} Tezos smart contract repository.`,
+  description: `${name} Tezos smart contract repository.`,
   dependencies: {
     // "create-tezos-smart-contract": "^0.0.1",
     "@taquito/signer": "^9.1.1",

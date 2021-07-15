@@ -1,6 +1,6 @@
-import { Bundle } from "../../../modules/bundle";
-import { Config } from "../../../modules/config";
-import { makeAccounts } from "./make-accounts";
+import { error } from "../../../console";
+import { createBundle } from "../../../modules/bundle";
+import { Config, ConfigFile } from "../../../modules/config";
 import { makePackageJSON } from "./make-package.json";
 import { makeREADME } from "./make-readme";
 
@@ -15,7 +15,7 @@ export const makeContractBundle = async (params: ContractBundleOptions) => {
     config,
   } = params;
 
-  const bundle = new Bundle(config.repoName, basePath);
+  const bundle = await createBundle(config.repoName, basePath);
 
   // .gitignore
   await bundle.writeTextFile('.gitignore', "build\nnode_modules\npackage-lock.json");
@@ -24,14 +24,21 @@ export const makeContractBundle = async (params: ContractBundleOptions) => {
   await bundle.makeDir("contracts");
   await bundle.makeDir("test");
   await bundle.makeDir("scripts");
-  await bundle.makeDir("scripts/sandbox");
-
-  // Sandbox accounts file
-  await bundle.writeTextFile('scripts/sandbox/accounts.js', makeAccounts(bundle));
 
   // README
-  await bundle.writeTextFile('README.md', makeREADME(bundle));
+  await bundle.writeTextFile('README.md', makeREADME(config.repoName));
+
+  // Config file
+  const configFile = new ConfigFile(config);
+  try {
+    configFile.validate();
+  } catch(validationError) {
+    error(`Could not create smart contract repository configuration:\n\n${validationError}`);
+    process.exit(1);
+  }
+
+  await bundle.writeJSONFile(ConfigFile.getName(), configFile.config, true);
 
   // package.json
-  await bundle.writeJSONFile('package.json', makePackageJSON(bundle));
+  await bundle.writeJSONFile('package.json', makePackageJSON(config.repoName));
 };
