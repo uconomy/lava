@@ -1,4 +1,5 @@
-import { Bundle, Config } from "../../../modules/bundle";
+import { Bundle } from "../../../modules/bundle";
+import { Config } from "../../../modules/config";
 import { makeAccounts } from "./make-accounts";
 import { makePackageJSON } from "./make-package.json";
 import { makeREADME } from "./make-readme";

@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 
-import { em, log, setDebug } from "../../console";
+import { em, debug, setDebug } from "../../console";
 
 export const addCompileCommand = (program: Command) => {
   program
@@ -14,13 +14,13 @@ export const addCompileCommand = (program: Command) => {
 
 // Full start-sandbox command controller
 export const compile = async (options: any) => {
-  em`Compiling contracts...\n`;
+  em(`Compiling contracts...\n`);
   
   const { debug, ...commandOptions } = options;
   setDebug(debug);
 
   // Debug options code
-  log(JSON.stringify(options, null, 2));
+  debug(JSON.stringify(options, null, 2));
 
   
 };

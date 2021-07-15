@@ -8,17 +8,17 @@ let cwd = process.cwd()
 export const setCWD = (_cwd: string) => cwd = _cwd;
 export const getCWD = () => cwd;
 
-export const log = (...args: any[]) => 
-  debugFlag && console.log(chalk.cyan`${args.join(' ')}`);
+export const debug = (...args: any[]) => 
+  debugFlag && console.log(chalk.cyan(args));
 
-export const info = (...args: any[]) => 
-  console.log(chalk.white`${args.join(' ')}`);
+export const log = (...args: any[]) => 
+  console.log(chalk.white(args));
 
 export const em = (...args: any[]) => 
-  console.log(chalk.greenBright`${args.join(' ')}`);
+  console.log(chalk.greenBright(args));
 
 export const warn = (...args: any[]) => 
-  console.log(chalk.yellow`${args.join(' ')}`);
+  console.log(chalk.yellow(args));
 
 export const error = (...args: any[]) => 
-  console.log(chalk.red`${args.join(' ')}`);
+  console.log(chalk.red(args));

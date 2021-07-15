@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import inquirer from 'inquirer';
 import { em, getCWD } from "../../console";
-import { Config, ConfigFile, defaultConfig } from '../../modules/bundle';
+import { Config, defaultConfig } from '../../modules/config';
 import { LIGOFlavors } from '../../modules/ligo';
 import { makeContractBundle } from './contract-bundle';
 
@@ -53,7 +53,7 @@ export const addInitCommand = (program: Command) => {
 
 // Full init command controller
 export const init = async () => {
-  em`Welcome, let's create your Tezos smart-contract!\n\n`;
+  em(`Welcome, let's create your Tezos smart-contract!\n\n`);
 
   await grabName();
   await grabFlavor();
@@ -62,7 +62,6 @@ export const init = async () => {
 
   await makeContractBundle({
     basePath: getCWD(),
-    name: config.repoName,
     config,
   });
 };

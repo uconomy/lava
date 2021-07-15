@@ -1,6 +1,6 @@
 import { spawn, execSync } from "child_process";
-import { em, error, info, log } from "../../console";
-import { defaultConfig } from "../bundle";
+import { em, error, log, debug } from "../../console";
+import { defaultConfig } from "../config";
 import { TezosProtocols } from "../tezos";
 import { createAccountsParams, createProtocolParams, flextesaProtocols } from "./parameters";
 import { FlextesaOptions } from "./types";
@@ -19,7 +19,7 @@ const startLine = "Flextesa: Please enter command:";
 let closed = true;
 
 export const startFlextesa = (_options: Partial<FlextesaOptions>) => {
-  info`Preparing Flextesa sandbox...`;
+  log(`Preparing Flextesa sandbox...`);
 
   // Merge with defaults
   const options = Object.assign({}, defaultOptions, _options);
@@ -61,8 +61,8 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>) => {
   ];
   const opts = {};
 
-  log`Starting Flextesa with these arguments:`;
-  log("docker " + args.join(' '));
+  debug(`Starting Flextesa with these arguments:`);
+  debug("docker " + args.join(' '));
 
   const flextesa = spawn("docker", args, opts);
 
@@ -91,7 +91,7 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>) => {
     
     // Print every message apart from "Flextesa: Please enter command:"
     if (!str.includes(startLine)) {
-      log(str);
+      debug(str);
     } else { // But when we reach it, Flextsa is ready
       stderr = "";
       closed = false;
@@ -108,7 +108,7 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>) => {
 
       // Print general output
       flextesa.stdout.on("data", (data) => {
-        log(data.toString());
+        debug(data.toString());
       });
 
       // Print standard flextesa output
@@ -117,7 +117,7 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>) => {
         error(str.replace(startLine, ""));
       });
 
-      em`Tezos sandbox is ready!`;
+      em(`Tezos sandbox is ready!`);
     }
   });
 };

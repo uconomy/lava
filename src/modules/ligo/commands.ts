@@ -1,5 +1,5 @@
 import { spawn, execSync } from "child_process";
-import { em, error, info, log } from "../../console";
+import { em, error, log, debug } from "../../console";
 import fs from 'fs';
 
 const compileFile = async (file: string) => {

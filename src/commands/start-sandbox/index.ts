@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 
-import { em, log, setDebug } from "../../console";
+import { em, debug, setDebug } from "../../console";
 import { startFlextesa } from "../../modules/flextesa";
 
 export const addStartSandboxCommand = (program: Command) => {
@@ -18,13 +18,13 @@ export const addStartSandboxCommand = (program: Command) => {
 
 // Full start-sandbox command controller
 export const startSandbox = async (options: any) => {
-  em`Starting Tezos sandbox...\n`;
+  em(`Starting Tezos sandbox...\n`);
   
   const { debug, ...commandOptions } = options;
   setDebug(debug);
 
   // Debug options code
-  log(JSON.stringify(options, null, 2));
+  debug(JSON.stringify(options, null, 2));
 
   startFlextesa(commandOptions);
 };

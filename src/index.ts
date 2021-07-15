@@ -2,7 +2,7 @@ import { Command } from 'commander';
 import { addCompileCommand } from './commands/compile';
 import { addInitCommand } from './commands/init';
 import { addStartSandboxCommand } from './commands/start-sandbox';
-import { log, setCWD, setDebug } from './console';
+import { debug, setCWD, setDebug } from './console';
 
 const program = new Command();
 
@@ -24,7 +24,7 @@ if (globalOptions.debug) {
 }
 
 if (globalOptions.folder) {
-  log`Change working directory to ${globalOptions.folder}`;
+  debug(`Change working directory to ${globalOptions.folder}`);
   setCWD(globalOptions.folder);
 }
 
