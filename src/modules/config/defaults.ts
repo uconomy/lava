@@ -40,6 +40,15 @@ import { Config } from "./types";
     }
   },
 
+  /**
+   * Newtork settings
+   * 
+   * These settings make up three aliases for the network you'll probably need while developing a
+   * smart contract on Tezos:
+   * - sandbox:   the local sandboxed network used to run unit tests and to test contract deploying
+   * - testnet:   the remote test network you can use to run (unit or) e2e tests and to deploy contract and test integration with your app
+   * - mainnet:   the public node of the real Tezos network, used only to deploy the finished contract
+   */
   networks: {
     sandbox: {
       defaultSignerSK: "edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq"
@@ -55,5 +64,9 @@ import { Config } from "./types";
       host: "https://mainnet-tezos.giganode.io",
       port: 443
     }
-  }
+  },
+
+  // Folder settings (relative to this file position)
+  contractsDirectory: "contracts",
+  outputDirectory: "build"
 };

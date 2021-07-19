@@ -47,5 +47,9 @@ export type Config = {
       host: string;
       port: number;
     }
-  }
+  },
+
+  // Folder settings  (relative to this file position)
+  contractsDirectory: string;
+  outputDirectory: string;
 };

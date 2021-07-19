@@ -1,11 +1,12 @@
 import chalk from 'chalk';
+import path from 'path';
 
 let debugFlag = false;
 export const setDebug = (_debug: boolean) => 
   debugFlag = _debug;
 
 let cwd = process.cwd()
-export const setCWD = (_cwd: string) => cwd = _cwd;
+export const setCWD = (_cwd: string) => cwd = path.resolve(process.cwd(), _cwd);
 export const getCWD = () => cwd;
 
 export const debug = (...args: any[]) => 
@@ -21,4 +22,4 @@ export const warn = (...args: any[]) =>
   console.log(chalk.yellow(args));
 
 export const error = (...args: any[]) => 
-  console.log(chalk.red(args));
+  console.log(chalk.redBright(args));

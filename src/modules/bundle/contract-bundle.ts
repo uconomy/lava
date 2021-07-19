@@ -1,5 +1,6 @@
 import { error, warn } from "../../console";
 import { Config, ConfigFile, defaultConfig } from "../config";
+import { BuildData } from "../ligo";
 import { Bundle } from "./bundle";
 
 export class ContractsBundle extends Bundle {
@@ -28,7 +29,39 @@ export class ContractsBundle extends Bundle {
     return this.config;
   }
 
-  async getContracts() {
+  async getContractsFiles() {
+    return await this.listFiles(this.config.contractsDirectory);
+  }
 
+  getContractFile(fileName: string) {
+    return this.getPath(this.config.contractsDirectory, fileName);
+  }
+
+  async readContract(fileName: string) {
+    const contractFile = this.getContractFile(fileName);
+
+    return await this.readTextFile(contractFile);
+  }
+
+  getBuildFile(contractName: string) {
+    return this.getPath(this.config.outputDirectory, `${contractName}.json`);
+  }
+
+  async writeBuildFile(contractName: string, data: any) {
+    const buildFile = this.getBuildFile(contractName);
+
+    return await this.writeJSONFile(buildFile, data, true);
+  }
+
+  async readBuildFile(contractName: string): Promise<BuildData> {
+    const buildFile = this.getBuildFile(contractName);
+
+    return await this.readJSONFile<BuildData>(buildFile);
+  }
+
+  async buildFileExists(contractName: string) {
+    const buildFile = this.getBuildFile(contractName);
+
+    return this.exists(buildFile);
   }
 }

@@ -25,7 +25,7 @@ export const mkdir = async (path: string): Promise<true> =>
 export const listFiles = async (path: string, options?: BufferEncoding | {
   encoding: BufferEncoding | null;
   withFileTypes?: false | undefined;
-}) => new Promise((resolve, reject) => {
+}): Promise<string[]> => new Promise((resolve, reject) => {
   fs.readdir(path, options, (err, files) => {
     err ? reject(err) : resolve(files);
   });
@@ -55,15 +55,15 @@ export class Bundle {
       throw new Error("Invalid base path provided to Bundle: folder does not exist.");
   }
 
-  getPath(name: string) {
-    return path.join(this.basePath, name);
+  getPath(...name: string[]) {
+    return path.resolve.apply(this, [this.basePath, ...name]);
   }
 
   async writeTextFile(filePath: string, data: string, encoding: BufferEncoding = 'utf-8') {
     return writeTextFile(this.getPath(filePath), data, encoding);
   }
 
-  async readTextFile(filePath: string, data: string, encoding: BufferEncoding = 'utf-8') {
+  async readTextFile(filePath: string, encoding: BufferEncoding = 'utf-8') {
     return readTextFile(this.getPath(filePath), encoding);
   }
 
