@@ -17,7 +17,7 @@ export const addCompileCommand = (program: Command) => {
     });
 }
 
-// Full start-sandbox command controller
+// Run LIGO compiler
 export const compile = async (options: any) => {
   em(`Compiling contracts...\n`);
 
