@@ -42,6 +42,19 @@ const grabFlavor = async () => {
   config.preferredLigoFlavor = res.preferredLigoFlavor;
 };
 
+// Ask for examples
+const grabExamplesPreference = async () => {
+  const res = await prompt([{
+    type: "list",
+    default: true,
+    choices: [{ name: 'Yes', value: true }, { name: 'No', value: false }],
+    name: "hasExamples",
+    message: "Would you like to have some example code in the newly created repo?",
+  }]);
+
+  return res.hasExamples;
+};
+
 export const addInitCommand = (program: Command) => {
   program
     .command('init')
@@ -58,10 +71,13 @@ export const init = async () => {
   await grabName();
   await grabFlavor();
 
+  const hasExamples = await grabExamplesPreference();
+
   // console.log(JSON.stringify(config, null, 2));
 
   await makeContractBundle({
     basePath: getCWD(),
     config,
+    hasExamples,
   });
 };

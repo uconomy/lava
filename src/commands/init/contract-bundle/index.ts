@@ -1,6 +1,8 @@
+import path from 'path';
 import { error } from "../../../console";
 import { createBundle } from "../../../modules/bundle";
 import { Config, ConfigFile } from "../../../modules/config";
+import { getContractFileName, makeContractFile } from "./make-contract";
 import { makeJestConfig } from "./make-jest-config";
 import { makePackageJSON } from "./make-package.json";
 import { makeREADME } from "./make-readme";
@@ -8,12 +10,14 @@ import { makeREADME } from "./make-readme";
 export type ContractBundleOptions = {
   basePath: string;
   config: Config;
+  hasExamples: boolean;
 };
 
 export const makeContractBundle = async (params: ContractBundleOptions) => {
   const {
     basePath,
     config,
+    hasExamples,
   } = params;
 
   const bundle = await createBundle(config.repoName, basePath);
@@ -45,4 +49,22 @@ export const makeContractBundle = async (params: ContractBundleOptions) => {
 
   // package.json
   await bundle.writeJSONFile('package.json', makePackageJSON(config.repoName));
+
+  // Example files or only placeholders?
+  let contractData = '';
+  if (hasExamples) {
+    contractData = makeContractFile(config.preferredLigoFlavor);
+  }
+
+  // Write contract file
+  await bundle.writeTextFile(
+    path.join('contracts', getContractFileName(config.preferredLigoFlavor, config.repoName)),
+    contractData
+  );
+
+  // Write test file
+  await bundle.writeTextFile(
+    path.join('test', `${config.repoName}.test.js`),
+    ''
+  );
 };
