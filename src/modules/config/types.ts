@@ -1,6 +1,12 @@
 import { LIGOFlavors, LIGOVersions } from "../ligo";
 import { FaucetAccount, TezosProtocols } from "../tezos";
 
+export enum ToolchainNetworks {
+  SANDBOX = 'sandbox',
+  TESTNET = 'testnet',
+  MAINNET = 'mainnet',
+}
+
 export type Config = {
   repoName: string;
 
@@ -33,17 +39,17 @@ export type Config = {
    * - mainnet:   the public node of the real Tezos network, used only to deploy the finished contract
    */
   networks: {
-    sandbox: { // Sandbox network settings; host and port are not required as we can derive from sandbox config
-      defaultSignerSK: string; // Default Tezos' actions signer, used to deploy contract and later interact with it
+    [ToolchainNetworks.SANDBOX]: { // Sandbox network settings; host and port are not required as we can derive from sandbox config
+      defaultSignerSK: string; // Default Tezos' actions signer Secret Key, used to deploy contract and later interact with it
     },
 
-    testnet: { // Remember you need to pass --testnet to test or deploy commands to run on this network
+    [ToolchainNetworks.TESTNET]: { // Remember you need to pass --testnet to test or deploy commands to run on this network
       host: string;
       port: number;
-      faucet: {} | FaucetAccount; // You can get one at https://faucet.tzalpha.net
+      faucet: null | FaucetAccount; // You can get one at https://faucet.tzalpha.net
     },
 
-    mainnet: { // This network can only be used to deploy, no tests allowed here
+    [ToolchainNetworks.MAINNET]: { // This network can only be used to deploy, no tests allowed here
       host: string;
       port: number;
     }

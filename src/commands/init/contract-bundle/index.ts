@@ -1,6 +1,7 @@
 import { error } from "../../../console";
 import { createBundle } from "../../../modules/bundle";
 import { Config, ConfigFile } from "../../../modules/config";
+import { makeJestConfig } from "./make-jest-config";
 import { makePackageJSON } from "./make-package.json";
 import { makeREADME } from "./make-readme";
 
@@ -38,6 +39,9 @@ export const makeContractBundle = async (params: ContractBundleOptions) => {
   }
 
   await bundle.writeJSONFile(ConfigFile.getName(), configFile.config, true);
+
+  // Jest config
+  await bundle.writeTextFile('jest.config.js', makeJestConfig(config.repoName));
 
   // package.json
   await bundle.writeJSONFile('package.json', makePackageJSON(config.repoName));

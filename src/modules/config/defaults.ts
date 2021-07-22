@@ -51,13 +51,14 @@ import { Config } from "./types";
    */
   networks: {
     sandbox: {
+      // Default Tezos' actions signer Secret Key, used to deploy contract and later interact with it
       defaultSignerSK: "edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq"
     },
 
     testnet: {
       host: "https://testnet-tezos.giganode.io",
       port: 443,
-      faucet: {}
+      faucet: null, // You can get one at https://faucet.tzalpha.net
     },
 
     mainnet: {

@@ -46,6 +46,8 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
+    "@taquito/signer": "^9.2.0",
+    "@taquito/taquito": "^9.2.0",
     "args": "^5.0.1",
     "chalk": "^4.1.1",
     "commander": "^8.0.0",

@@ -2,6 +2,7 @@ import { Command } from 'commander';
 import { addCompileCommand } from './commands/compile';
 import { addInitCommand } from './commands/init';
 import { addStartSandboxCommand } from './commands/start-sandbox';
+import { addTestCommand } from './commands/test';
 import { debug, setCWD, setDebug } from './console';
 
 const program = new Command();
@@ -15,6 +16,7 @@ program
 addInitCommand(program);
 addStartSandboxCommand(program);
 addCompileCommand(program);
+addTestCommand(program);
 
 const globalOptions = program.opts();
 
