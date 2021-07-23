@@ -1,5 +1,6 @@
+import chalk from "chalk";
 import { spawn } from "child_process";
-import { debug, error, getCWD, log } from "../../console";
+import { debug, getCWD } from "../../console";
 import { ContractsBundle } from "../bundle";
 import { JestCommandOptions } from "./types";
 
@@ -10,26 +11,30 @@ const launchTests = async (options: JestCommandOptions): Promise<void> => {
     const cwd = getCWD();
 
     const args = [
-      "test",
+      "--colors",
     ];
 
-    const npmJest = spawn("npm", args, { cwd });
+    console.log(chalk.reset());
+    const npmJest = spawn("jest", args, { cwd });
 
-    npmJest.on("close", async () => {
+    npmJest.on("close", async (code: number | null) => {
+      if (code) {
+        process.exit(code);
+      } 
+
       const finishMillis = (new Date()).getTime();
-      debug(`✅ Done in ${(finishMillis - initMillis) / 1000}s.`);
+      debug(`✅ Testing process done in ${(finishMillis - initMillis) / 1000} s.`);
 
-      resolve();
+      // resolve();
+      process.exit(0);
     });
 
     npmJest.stdout.on("data", (data) => {
-      log(data.toString());
+      process.stdout.write(data);
     });
 
     npmJest.stderr.on("data", (data) => {
-      error(data.toString());
-      reject(npmJest.stderr);
-      process.exit(1);
+      process.stderr.write(data);
     });
   });
 };

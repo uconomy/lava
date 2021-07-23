@@ -15,7 +15,7 @@ export const setupJestEnv = async (): Promise<CustomJestGlobals> => {
   // Start to configure Sandbox, then will switch to Testnet if --tezosToolchainNetwork=testnet was passed in command ENV
   let network: CustomJestGlobals['tezosToolchainNetwork'] = ToolchainNetworks.SANDBOX;
   let signer: CustomJestGlobals['tezosDefaultSigner'] = config.networks.sandbox.defaultSignerSK;
-  let rpcNode: string = `https://${config.sandbox.host}:${config.sandbox.port}`;
+  let rpcNode: string = `http://${config.sandbox.host}:${config.sandbox.port}`;
 
   if (tezosToolchainNetwork){
     if (tezosToolchainNetwork === ToolchainNetworks.TESTNET) {
