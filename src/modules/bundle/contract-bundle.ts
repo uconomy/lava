@@ -59,7 +59,7 @@ export class ContractsBundle extends Bundle {
     return await this.readJSONFile<BuildData>(buildFile);
   }
 
-  async buildFileExists(contractName: string) {
+  buildFileExists(contractName: string) {
     const buildFile = this.getBuildFile(contractName);
 
     return this.exists(buildFile);
