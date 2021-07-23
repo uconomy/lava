@@ -56,11 +56,6 @@ const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions,
         version: ligoVersion,
       },
       michelson: "",
-      // abi: [],
-      // source,
-      // networks: {},
-      // schemaVersion: "3.2.0-tezos.1",
-      // networkType: "tezos",
     };
 
     const args = [
@@ -81,21 +76,9 @@ const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions,
     ligo.on("close", async () => {
       debug("\t\t✅ Done.");
 
-      // const outFile = path.join(...BUILD_FOLDER, `${contract}.json`);
-      // const buildFolder = path.dirname(outFile);
-
-      // if (!fs.existsSync(buildFolder)) {
-      //   let dirPath = ".";
-      //   for (const folder of BUILD_FOLDER) {
-      //     dirPath = path.join(dirPath, folder);
-      //     execSync(`mkdir ${dirPath}`);
-      //   }
-      // }
-
       const outFile = bundle.getBuildFile(contractFileName);
 
       debug(`\t📦 Writing output file "${path.relative(cwd,outFile)}"...`);
-      // fs.writeFileSync(outFile, JSON.stringify(built, null, 2));
       await bundle.writeBuildFile(contractFileName, built);
       debug("\t\t✅ Done.");
 
