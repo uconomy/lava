@@ -38,7 +38,7 @@ export const createProtocolParams = (tezosProtocol: TezosProtocols): string[] =>
 // tezos-client --endpoint http://localhost:20000 transfer 1.00 from alice to alice
 // tezos-client --endpoint http://localhost:20000 bake for alice
 export const createAccountsParams = (accounts: FlextesaAccounts, amountTz: number = 100): string[] => {
-  const balance: number = amountTz * 10^9; // XTZ in mutez
+  const balance: number = amountTz * Math.pow(10, 9); // XTZ in mutez
   const params: string[] = [];
 
   for (const name in accounts) {
