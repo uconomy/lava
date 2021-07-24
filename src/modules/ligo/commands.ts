@@ -1,18 +1,9 @@
-import { spawn, execSync } from "child_process";
-import crypto from 'crypto';
-import { em, error, log, debug, getCWD, warn } from "../../console";
-import fs from 'fs';
+import { spawn } from "child_process";
 import path from 'path';
-import { BuildData, LigoCompilerOptions, LIGOVersions } from "./types";
+import { debug, error, getCWD, log } from "../../console";
 import { ContractsBundle } from "../bundle";
 import { isLigoVersionLT } from "./parameters";
-
-const _getHash = (source: string) => {
-  const hash = crypto.createHash('sha256');
-  
-  hash.update(source);
-  return hash.digest('hex');
-};
+import { BuildData, LigoCompilerOptions, LIGOVersions } from "./types";
 
 const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions, bundle: ContractsBundle): Promise<void> => {
   return new Promise(async (resolve, reject) => {
@@ -27,8 +18,7 @@ const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions,
       return;
     }
 
-    const hash = _getHash(source);
-
+    const hash = bundle.generateHash(source);
     const sourcePath = bundle.getContractFile(contractFileName);
 
     if (bundle.buildFileExists(contractFileName)) {

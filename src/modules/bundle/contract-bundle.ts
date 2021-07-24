@@ -2,6 +2,12 @@ import { error, warn } from "../../console";
 import { Config, ConfigFile, defaultConfig } from "../config";
 import { BuildData } from "../ligo";
 import { Bundle } from "./bundle";
+import crypto from 'crypto';
+
+export enum BuildErrorCodes {
+  INVALID_SOURCE_PATH = 'INVALID_SOURCE_PATH',
+  INVALID_HASH = 'INVALID_HASH',
+}
 
 export class ContractsBundle extends Bundle {
   config: Config = defaultConfig;
@@ -63,5 +69,24 @@ export class ContractsBundle extends Bundle {
     const buildFile = this.getBuildFile(contractName);
 
     return this.exists(buildFile);
+  }
+
+  generateHash = (contractData: string) => {
+    const hash = crypto.createHash('sha256');
+    
+    hash.update(contractData);
+    return hash.digest('hex');
+  };
+
+  isBuildValid(sourcePath: string, hash: string, buildFile: BuildData): BuildErrorCodes | true {
+    if (buildFile.sourcePath !== sourcePath) {
+      return BuildErrorCodes.INVALID_SOURCE_PATH;
+    }
+
+    if (buildFile.hash !== hash) {
+      return BuildErrorCodes.INVALID_HASH;
+    }
+
+    return true;
   }
 }
