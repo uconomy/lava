@@ -59,13 +59,17 @@ const deployContract = async (contractName: string, storage: any, signer: TezosS
   _setSigner(signer);
 
   // Originate the contract
-  const op = await Tezos.contract.originate({
-    code,
-    storage,
-  });
+  try {
+    const op = await Tezos.contract.originate({
+      code,
+      storage,
+    });
 
-  const res = await op.contract();
-  return res;
+    const res = await op.contract();
+    return res;
+  } catch (err) {
+    throw new Error(`ERROR while deploying contract ${contractName}:\n\n\t${err.message}.\n\nPlease review test's storage configuration and make sure it matches contract's expected values.`);
+  }
 };
 
 // Test util to map to LIGO's byte type
