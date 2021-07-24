@@ -20,8 +20,14 @@ const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions,
 
     debug("\t👓 Reading source...");
     const source = await bundle.readContract(contractFileName);
-    const hash = _getHash(source);
     debug("\t\t✅ Done.");
+
+    if (source === "") {
+      error('The specified contract file is empty, skipping compilation.');
+      return;
+    }
+
+    const hash = _getHash(source);
 
     const sourcePath = bundle.getContractFile(contractFileName);
 
