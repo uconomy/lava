@@ -5,6 +5,7 @@ import { Bundle } from "./bundle";
 import crypto from 'crypto';
 
 export enum BuildErrorCodes {
+  MICHELSON_MISSING = 'MICHELSON_MISSING',
   INVALID_SOURCE_PATH = 'INVALID_SOURCE_PATH',
   INVALID_HASH = 'INVALID_HASH',
 }
@@ -43,8 +44,8 @@ export class ContractsBundle extends Bundle {
     return this.getPath(this.config.contractsDirectory, fileName);
   }
 
-  async readContract(fileName: string) {
-    const contractFile = this.getContractFile(fileName);
+  async readContract(contractName: string) {
+    const contractFile = this.getContractFile(contractName);
 
     return await this.readTextFile(contractFile);
   }
@@ -79,6 +80,10 @@ export class ContractsBundle extends Bundle {
   };
 
   isBuildValid(sourcePath: string, hash: string, buildFile: BuildData): BuildErrorCodes | true {
+    if (!buildFile.michelson || buildFile.michelson === '') {
+      return BuildErrorCodes.MICHELSON_MISSING;
+    }
+
     if (buildFile.sourcePath !== sourcePath) {
       return BuildErrorCodes.INVALID_SOURCE_PATH;
     }

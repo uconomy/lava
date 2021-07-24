@@ -2,7 +2,7 @@ import fs from 'fs';
 import { TezosToolkit, ContractAbstraction, ContractProvider } from "@taquito/taquito";
 import { InMemorySigner, importKey } from "@taquito/signer";
 import { CustomJestGlobals, isFaucet, TezosSigner } from './types';
-import { ContractsBundle } from '../bundle';
+import { BuildErrorCodes, ContractsBundle } from '../bundle';
 import { error } from '../../console';
 
 type AugmentedJestGlobal = {
@@ -10,6 +10,8 @@ type AugmentedJestGlobal = {
   deployContract(contractName: string, storage: any, signer: TezosSigner): Promise<ContractAbstraction<ContractProvider>>;
 
   toBytes(str: string): string;
+
+  _checkedContracts?: { [x: string]: object[] | false },
 }
 
 // This is needed to infer a type to Jest context's global variable
@@ -36,23 +38,61 @@ _setSigner(jestGlobal.tezosDefaultSigner);
 
 const bundle = new ContractsBundle(jestGlobal.tezosCWD);
 
-const deployContract = async (contractName: string, storage: any, signer: TezosSigner = jestGlobal.tezosDefaultSigner) => {
-  if (!fs.existsSync(bundle.getBuildFile(contractName))) {
+const validateContract = async (contractName: string) => {
+  if (!jestGlobal._checkedContracts) {
+    jestGlobal._checkedContracts = {};
+  }
+
+  // Avoid re-doing checks if possible, will return previous results
+  if (jestGlobal._checkedContracts[contractName]) {
+    return jestGlobal._checkedContracts[contractName];
+  }
+
+  // If any of these checks fails, false will be stored in the cache
+  jestGlobal._checkedContracts[contractName] = false;
+
+  const sourcePath = bundle.getContractFile(contractName);
+  if (!bundle.exists(sourcePath)) {
     throw new Error(`ERROR: Specified contract "${contractName}" doesn't exist.`);
   }
 
-  const contract = await bundle.readBuildFile(contractName);
-  const michelson = contract.michelson;
-  if (!michelson) {
-    throw new Error(`ERROR: Invalid contract "${contractName}", Michelson code is missing!`);
+  if (!bundle.buildFileExists(contractName)) {
+    throw new Error(`ERROR: Specified contract "${contractName}" has never been compiled.`);
+  }
+
+  const contract = await bundle.readContract(contractName);
+  const hash = bundle.generateHash(contract);
+
+  const buildFile = await bundle.readBuildFile(contractName);
+
+  switch(bundle.isBuildValid(sourcePath, hash, buildFile)) {
+    case BuildErrorCodes.MICHELSON_MISSING: 
+      throw new Error(`ERROR: Invalid contract "${contractName}", Michelson code is missing!`);
+    case BuildErrorCodes.INVALID_HASH:
+      throw new Error(`ERROR: It seems the compiled version of contract "${contractName}" is outdated, please compile it again!`);
+    case BuildErrorCodes.INVALID_SOURCE_PATH:
+      throw new Error(`ERROR: The compiled version for "${contractName}" was compiled from a different source path "${buildFile.sourcePath}"!`);
+    case true:
+      break;
   }
 
   // Parse JSON-michelson
   let code: object[] = [];
   try {
-    code = JSON.parse(michelson);
+    code = JSON.parse(buildFile.michelson);
   } catch (err) {
     throw new Error(`ERROR: Failed to parse JSON-Michelson for contract ${contractName}, given error was: ${err}`);
+  }
+
+  jestGlobal._checkedContracts[contractName] = code;
+
+  return code;
+};
+
+const deployContract = async (contractName: string, storage: any, signer: TezosSigner = jestGlobal.tezosDefaultSigner) => {
+  const code = await validateContract(contractName);
+  if (!code) {
+    throw new Error(`Unable to process contract ${contractName}, deploy failed.`);
   }
 
   // Set the correct deployer account
