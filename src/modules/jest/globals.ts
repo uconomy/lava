@@ -1,9 +1,7 @@
-import fs from 'fs';
 import { TezosToolkit, ContractAbstraction, ContractProvider } from "@taquito/taquito";
 import { InMemorySigner, importKey } from "@taquito/signer";
 import { CustomJestGlobals, isFaucet, TezosSigner } from './types';
 import { BuildErrorCodes, ContractsBundle } from '../bundle';
-import { error } from '../../console';
 
 type AugmentedJestGlobal = {
   Tezos: TezosToolkit;
