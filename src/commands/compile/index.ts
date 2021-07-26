@@ -5,24 +5,22 @@ import { ContractsBundle } from '../../modules/bundle';
 import { compileWithLigo, LigoCompilerOptions, LIGOVersions } from '../../modules/ligo';
 import { toLigoVersion } from '../../modules/ligo/parameters';
 
-export const addCompileCommand = (program: Command) => {
+export const addCompileCommand = (program: Command, debugHook: (cmd: Command) => void) => {
   program
     .command('compile')
-    .description('compile contract(s) using LIGO compiler.')
+    .description('Compile contract(s) using LIGO compiler.')
       .option('-c, --contract <contract>', 'Compile a single smart contract source file')
       .option('-l, --ligo-version <version>', `Choose a specific LIGO version. Default is "next", available are: ${Object.values(LIGOVersions).join(', ')}`)
       .option('-f, --force', 'Force the compilation avoiding LIGO version warnings')
     .action((options) => {
       compile(options);
-    });
+    })
+    .hook('preAction', debugHook);
 }
 
 // Run LIGO compiler
 export const compile = async (options: any) => {
   em(`Compiling contracts...\n`);
-
-  // Debug options code
-  debug(JSON.stringify(options, null, 2));
 
   // Read configfile
   const contractsBundle = new ContractsBundle(getCWD());

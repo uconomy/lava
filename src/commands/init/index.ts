@@ -55,13 +55,14 @@ const grabExamplesPreference = async () => {
   return res.hasExamples;
 };
 
-export const addInitCommand = (program: Command) => {
+export const addInitCommand = (program: Command, debugHook: (cmd: Command) => void) => {
   program
     .command('init')
-    .description('starts a small configuration utility to create a new smart contract repo.')
-    .action((source, destination) => {
+    .description('Starts a small configuration utility to create a new smart contract repo.')
+    .action(() => {
       init();
-    });
+    })
+    .hook('preAction', debugHook);
 }
 
 // Full init command controller

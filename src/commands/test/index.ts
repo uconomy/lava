@@ -5,31 +5,31 @@ import { ToolchainNetworks } from '../../modules/config';
 import { testWithJest } from '../../modules/jest';
 import { JestCommandOptions } from '../../modules/jest/types';
 
-export const addTestCommand = (program: Command) => {
+export const addTestCommand = (program: Command, debugHook: (cmd: Command) => void) => {
   program
     .command('test')
-    .description('perform unit tests on smart contracts with Jest.')
+    .description('Perform unit tests on smart contracts with Jest.')
       .option('-n, --network <network>', `Choose to run test either in ${ToolchainNetworks.SANDBOX} or ${ToolchainNetworks.TESTNET} networks.`)
     .action((options) => {
-      test(options);
-    });
+      test(program, options);
+    })
+    .hook('preAction', debugHook);
 }
 
 // Lauch Jest to run unit tests
-export const test = async (options: any) => {
+export const test = async (program: Command, options: any) => {
   em(`Perform unit tests...\n`);
-
-  // Debug options code
-  debug(JSON.stringify(options, null, 2));
 
   // Read configfile
   const contractsBundle = new ContractsBundle(getCWD());
-  // const { ligoVersion } = await contractsBundle.readConfigFile();
+
+  // Prepare options
+  const defaultOptions: JestCommandOptions = {
+    network: ToolchainNetworks.SANDBOX,
+  };
 
   // Build final options
-  const testOptions: JestCommandOptions = Object.assign({}, {
-    network: ToolchainNetworks.SANDBOX,
-  }, options);
+  const testOptions: JestCommandOptions = Object.assign({}, defaultOptions, options);
 
   log(`Working on "${testOptions.network}" network`);
 

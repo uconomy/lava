@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 import { addCompileCommand } from './commands/compile';
+import { addDeployCommand } from './commands/deploy';
 import { addInitCommand } from './commands/init';
 import { addStartSandboxCommand } from './commands/start-sandbox';
 import { addTestCommand } from './commands/test';
@@ -11,23 +12,35 @@ program
   .version("0.0.1")
   .option('--debug', 'run the command in debug mode, with a lot more details about it')
   .option('-f, --folder <cwd>', 'change the working directory to the specified folder')
-  .parse();
+  .hook('preAction', (cmd: Command) => {
+    const options = cmd.opts();
 
-addInitCommand(program);
-addStartSandboxCommand(program);
-addCompileCommand(program);
-addTestCommand(program);
+    if (options.debug) {
+      setDebug(true);
+    }
+    
+    if (options.folder) {
+      debug(`Change working directory to ${options.folder}`);
+      setCWD(options.folder);
+    }
+  });
 
-const globalOptions = program.opts();
+const debugHook = (cmd: Command) => {
+  const options = cmd.opts();
+  const optionsString = JSON.stringify(options, null, 2);
 
-if (globalOptions.debug) {
-  setDebug(true);
+  // Debug options code
+  if (options && optionsString !== "{}") {
+    debug(`Command options:\n${optionsString}\n`);
+  } else {
+    debug('No options were passed to this command.\n');
+  }
 }
 
-if (globalOptions.folder) {
-  debug(`Change working directory to ${globalOptions.folder}`);
-  setCWD(globalOptions.folder);
-}
+addInitCommand(program, debugHook);
+addStartSandboxCommand(program, debugHook);
+addCompileCommand(program, debugHook);
+addTestCommand(program, debugHook);
+addDeployCommand(program, debugHook);
 
 program.parse(process.argv);
-

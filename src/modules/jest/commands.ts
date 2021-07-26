@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import path from "path";
 import { spawn } from "child_process";
 import { debug, getCWD } from "../../console";
 import { ContractsBundle } from "../bundle";
