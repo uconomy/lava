@@ -20,7 +20,7 @@ export const setupJestEnv = async (): Promise<CustomJestGlobals> => {
   if (tezosToolchainNetwork){
     if (tezosToolchainNetwork === ToolchainNetworks.TESTNET) {
       network = ToolchainNetworks.TESTNET;
-      rpcNode = `https://${config.networks.testnet.host}:${config.networks.testnet.port}`;
+      rpcNode = `${config.networks.testnet.host}:${config.networks.testnet.port}`;
 
       if (config.networks.testnet.faucet && isFaucet(config.networks.testnet.faucet)) {
         signer = config.networks.testnet.faucet;

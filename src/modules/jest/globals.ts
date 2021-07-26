@@ -67,7 +67,7 @@ const validateContract = async (contractName: string) => {
     case BuildErrorCodes.MICHELSON_MISSING: 
       throw new Error(`ERROR: Invalid contract "${contractName}", Michelson code is missing!`);
     case BuildErrorCodes.INVALID_HASH:
-      throw new Error(`ERROR: It seems the compiled version of contract "${contractName}" is outdated, please compile it again!`);
+      throw new Error(`ERROR: It seems the contract "${contractName}" has been edited since last compilation, please compile it again!`);
     case BuildErrorCodes.INVALID_SOURCE_PATH:
       throw new Error(`ERROR: The compiled version for "${contractName}" was compiled from a different source path "${buildFile.sourcePath}"!`);
     case true:
