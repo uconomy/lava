@@ -5,6 +5,9 @@ import { TezosProtocols } from "../tezos";
 import { createAccountsParams, createProtocolParams, flextesaProtocols } from "./parameters";
 import { FlextesaOptions } from "./types";
 
+// Name for the running Docker image
+const POD_NAME = 'flextesa-sandbox';
+
 const defaultProtocol = TezosProtocols.FLORENCE;
 const defaultOptions: FlextesaOptions = defaultConfig.sandbox;
 
@@ -36,7 +39,7 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>) => {
     "-i",
     "--rm",
     "--name",
-    "my-sandbox",
+    POD_NAME,
     "-p",
     host + ":" + port + ":20000",
     "tqtezos/flextesa:20210602",
@@ -121,7 +124,7 @@ const stopFlextesa = async (callback?: () => void) => {
   closed = true;
 
   try {
-    execSync("docker rm -f my-sandbox");
+    execSync(`docker rm -f ${POD_NAME}`);
   } catch (e) {}
 
   callback && callback();
