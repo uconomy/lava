@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import inquirer from 'inquirer';
-import { em, getCWD } from "../../console";
+import { em, getCWD, log } from "../../console";
 import { Config, defaultConfig } from '../../modules/config';
 import { LIGOFlavors } from '../../modules/ligo';
 import { makeContractBundle } from './contract-bundle';
@@ -59,22 +59,28 @@ export const addInitCommand = (program: Command, debugHook: (cmd: Command) => vo
   program
     .command('init')
     .description('Starts a small configuration utility to create a new smart contract repo.')
-    .action(() => {
-      init();
+    .argument('[name]', "(Optional) The name of the new repo to be created")
+    .action((name) => {
+      init(name);
     })
     .hook('preAction', debugHook);
 }
 
 // Full init command controller
-export const init = async () => {
-  em(`Welcome, let's create your Tezos smart-contract!\n\n`);
+export const init = async (name?: string) => {
+  em(`Welcome, let's create your Tezos smart-contract!\n`);
 
-  await grabName();
+  if (name) {
+    config.repoName = name;
+
+    log(`The name of the repository will be "${name}".\n`);
+  } else {
+    await grabName();
+  }
+
   await grabFlavor();
 
   const hasExamples = await grabExamplesPreference();
-
-  // console.log(JSON.stringify(config, null, 2));
 
   await makeContractBundle({
     basePath: getCWD(),
