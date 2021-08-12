@@ -7,10 +7,15 @@ import { Config, ToolchainNetworks } from "../config";
 import { isFlextesaRunning } from '../flextesa';
 import { DeployCommandOptions } from "./types";
 
+const _failWith = (str: string) => {
+  error(str);
+
+  process.exit(1);
+}
+
 const deployInSandbox = async (contract: Contract, config: Config) => {
   if (!await isFlextesaRunning()) {
-    error(`ERROR: Unable to find a running Sandbox to deploy contracts.\nPlease get it running via the start-sandbox command.`);
-    process.exit(1);
+    _failWith(`ERROR: Unable to find a running Sandbox to deploy contracts.\nPlease get it running via the start-sandbox command.`);
   }
 
   launchDeployer({
@@ -58,12 +63,6 @@ const deployInMainnet = async (contract: Contract, config: Config) => {
     }
   }, { openBrowser: true });
 };
-
-const _failWith = (str: string) => {
-  error(str);
-
-  process.exit(1);
-}
 
 const handleOutdatedBuildfile = async (config: Config, contractName: string, options: DeployCommandOptions) => {
   if (options.network === ToolchainNetworks.MAINNET) {
