@@ -1,9 +1,9 @@
 import chalk from "chalk";
 import path from "path";
 import { spawn } from "child_process";
-import { debug, getCWD } from "../../console";
+import { debug, error, getCWD } from "../../console";
 import { ContractsBundle } from "../bundle";
-import { JestCommandOptions } from "./types";
+import { JestCommandEnv, JestCommandOptions } from "./types";
 
 const launchTests = async (options: JestCommandOptions): Promise<void> => {
   return new Promise(async (resolve, reject) => {
@@ -15,28 +15,41 @@ const launchTests = async (options: JestCommandOptions): Promise<void> => {
       "--colors",
     ];
 
+    const env: JestCommandEnv = {
+      ...process.env,
+      USE_OLD_BUILD: options.oldBuild ? 'true' : 'false',
+    };
+
     console.log(chalk.reset());
-    const npmJest = spawn("jest", args, { cwd });
+    try {
+      const npmJest = spawn("jest", args, { cwd, env });
 
-    npmJest.on("close", async (code: number | null) => {
-      if (code) {
-        process.exit(code);
-      } 
+      npmJest.on('error', (err) => {
+        error(`ERROR Starting Jest: ${err}`);
+      })
 
-      const finishMillis = (new Date()).getTime();
-      debug(`✅ Testing process done in ${(finishMillis - initMillis) / 1000} s.`);
+      npmJest.on("close", async (code: number | null) => {
+        if (code) {
+          process.exit(code);
+        } 
 
-      // resolve();
-      process.exit(0);
-    });
+        const finishMillis = (new Date()).getTime();
+        debug(`✅ Testing process done in ${(finishMillis - initMillis) / 1000} s.`);
 
-    npmJest.stdout.on("data", (data) => {
-      process.stdout.write(data);
-    });
+        // resolve();
+        process.exit(0);
+      });
 
-    npmJest.stderr.on("data", (data) => {
-      process.stderr.write(data);
-    });
+      npmJest.stdout.on("data", (data) => {
+        process.stdout.write(data);
+      });
+
+      npmJest.stderr.on("data", (data) => {
+        process.stderr.write(data);
+      });
+    } catch (err) {
+      error(`ERROR Starting Jest, ${err}`);
+    }
   });
 };
 

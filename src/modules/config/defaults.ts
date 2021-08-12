@@ -15,6 +15,9 @@ import { Config } from "./types";
   ligoVersion: LIGOVersions.next,
   preferredLigoFlavor: LIGOFlavors.PascaLIGO,
 
+  // Automatic compilation on old/missing build file
+  autoCompile: false,
+
   // Sandbox Settings
   sandbox: {
     host: "localhost",

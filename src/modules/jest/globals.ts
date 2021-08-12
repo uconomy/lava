@@ -1,7 +1,9 @@
 import { TezosToolkit, ContractAbstraction, ContractProvider } from "@taquito/taquito";
 import { InMemorySigner, importKey } from "@taquito/signer";
-import { CustomJestGlobals, isFaucet, TezosSigner } from './types';
+import { CustomJestGlobals, isFaucet, JestCommandEnv, TezosSigner } from './types';
 import { BuildErrorCodes, ContractsBundle } from '../bundle';
+import { Config } from "../config";
+import { compile } from "../../commands/compile";
 
 type AugmentedJestGlobal = {
   Tezos: TezosToolkit;
@@ -21,7 +23,7 @@ const Tezos = new TezosToolkit(jestGlobal.tezosRPCNode);
 // Internal functions
 const _setSigner = (signer: TezosSigner) => {
   if (isFaucet(signer)) {
-    importKey(Tezos, signer.email, signer.password, signer.mnemonic, signer.secret);
+    importKey(Tezos, signer.email, signer.password, signer.mnemonic.join(' '), signer.secret);
 
     Tezos.setProvider({ signer: new InMemorySigner(signer.pkh, signer.password) });
   } else {
@@ -35,6 +37,28 @@ const _setSigner = (signer: TezosSigner) => {
 _setSigner(jestGlobal.tezosDefaultSigner);
 
 const bundle = new ContractsBundle(jestGlobal.tezosCWD);
+let config: Config;
+
+const handleOutdatedBuildfile = async (contractName: string) => {
+  const { USE_OLD_BUILD } = process.env as JestCommandEnv;
+
+  if (USE_OLD_BUILD === 'true') {
+    return; // Go on with testing
+  } else {
+    // Cache config for all the tests to spped up the process
+    if (!config) {
+      config = await bundle.readConfigFile();
+    }
+
+    if (!config.autoCompile) {
+      throw new Error(`ERROR: It seems the contract "${contractName}" has been edited since last compilation.\nYou can turn on "autoCompile" in config.json, compile it manually or ask the tests to be run on old version passing --old-build to the test command.`);
+    }
+ 
+    await compile({
+      contract: contractName
+    });
+  }
+};
 
 const validateContract = async (contractName: string) => {
   if (!jestGlobal._checkedContracts) {
@@ -67,7 +91,8 @@ const validateContract = async (contractName: string) => {
     case BuildErrorCodes.MICHELSON_MISSING: 
       throw new Error(`ERROR: Invalid contract "${contractName}", Michelson code is missing!`);
     case BuildErrorCodes.INVALID_HASH:
-      throw new Error(`ERROR: It seems the contract "${contractName}" has been edited since last compilation, please compile it again!`);
+      await handleOutdatedBuildfile(contractName);
+      break;
     case BuildErrorCodes.INVALID_SOURCE_PATH:
       throw new Error(`ERROR: The compiled version for "${contractName}" was compiled from a different source path "${buildFile.sourcePath}"!`);
     case true:

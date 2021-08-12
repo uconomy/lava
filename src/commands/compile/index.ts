@@ -19,7 +19,7 @@ export const addCompileCommand = (program: Command, debugHook: (cmd: Command) =>
 }
 
 // Run LIGO compiler
-export const compile = async (options: any) => {
+export const compile = async (options: Partial<LigoCompilerOptions>) => {
   em(`Compiling contracts...\n`);
 
   // Read configfile

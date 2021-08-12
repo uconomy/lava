@@ -10,6 +10,7 @@ export const addTestCommand = (program: Command, debugHook: (cmd: Command) => vo
     .command('test')
     .description('Perform unit tests on smart contracts with Jest.')
       .option('-n, --network <network>', `Choose to run test either in ${ToolchainNetworks.SANDBOX} or ${ToolchainNetworks.TESTNET} networks.`)
+      .option('--old-build', 'Use the latest contract build found instead of stopping/rebuilding')
     .action((options) => {
       test(program, options);
     })

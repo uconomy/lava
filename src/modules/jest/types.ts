@@ -3,7 +3,12 @@ import { FaucetAccount } from "../tezos";
 
 export type JestCommandOptions = {
   network: ToolchainNetworks.SANDBOX | ToolchainNetworks.TESTNET;
+  oldBuild?: boolean;
 }
+
+export type JestCommandEnv = NodeJS.ProcessEnv & {
+  USE_OLD_BUILD: string;
+};
 
 export type TezosSigner = string | FaucetAccount;
 

@@ -14,6 +14,9 @@ export type Config = {
   ligoVersion: LIGOVersions;
   preferredLigoFlavor: LIGOFlavors;
 
+  // Automatic compilation on old/missing build file
+  autoCompile: boolean;
+
   // Sandbox Settings
   sandbox: {
     host: string;
@@ -55,7 +58,7 @@ export type Config = {
     }
   },
 
-  // Folder settings  (relative to this file position)
+  // Folder settings (relative to this file position)
   contractsDirectory: string;
   outputDirectory: string;
 };

@@ -1,4 +1,5 @@
 import { Contract, launchDeployer, NetworkType } from 'tezos-builder-suite';
+import { compile } from '../../commands/compile';
 
 import { error, warn, em } from "../../console";
 import { BuildErrorCodes, ContractsBundle } from "../bundle";
@@ -58,6 +59,24 @@ const _failWith = (str: string) => {
   process.exit(1);
 }
 
+const handleOutdatedBuildfile = async (config: Config, contractName: string, options: DeployCommandOptions) => {
+  if (options.network === ToolchainNetworks.MAINNET) {
+    _failWith(`ERROR: It seems the contract "${contractName}" has been edited since last compilation. To deploy in MainNet, you MUST compile it (and test it again) before deploying.`);
+  }
+
+  if (options.oldBuild) {
+    return; // Go on with the deploy
+  }
+
+  if (!config.autoCompile) {
+    _failWith(`ERROR: It seems the contract "${contractName}" has been edited since last compilation.\nYou can turn on "autoCompile" in config.json, compile it manually or ask the deploy to be run on old version passing --old-build to the deploy command.`);
+  }
+
+  await compile({
+    contract: contractName
+  });
+};
+
 export const deployContract = async (bundle: ContractsBundle, options: DeployCommandOptions) => {
   const contractName = options.contract;
   const sourcePath = bundle.getContractFile(contractName);
@@ -73,13 +92,15 @@ export const deployContract = async (bundle: ContractsBundle, options: DeployCom
   const hash = bundle.generateHash(contract);
 
   const buildFile = await bundle.readBuildFile(contractName);
+  const config = await bundle.readConfigFile();
 
   // Validate build file
   switch(bundle.isBuildValid(sourcePath, hash, buildFile)) {
     case BuildErrorCodes.MICHELSON_MISSING: 
       _failWith(`ERROR: Invalid contract "${contractName}", Michelson code is missing!`);
     case BuildErrorCodes.INVALID_HASH:
-      _failWith(`ERROR: It seems the contract "${contractName}" has been edited since last compilation, stopping deploy.`);
+      await handleOutdatedBuildfile(config, contractName, options);
+      break;
     case BuildErrorCodes.INVALID_SOURCE_PATH:
       _failWith(`ERROR: The compiled version for "${contractName}" was compiled from a different source path "${buildFile.sourcePath}", stopping deploy.`);
     case true:
@@ -94,7 +115,6 @@ export const deployContract = async (bundle: ContractsBundle, options: DeployCom
     _failWith(`ERROR: Failed to parse JSON-Michelson for contract ${contractName}, given error was: ${err}`);
   }
 
-  const config = await bundle.readConfigFile();
   const contractObject: Contract = {
     name: contractName,
     code: contract,

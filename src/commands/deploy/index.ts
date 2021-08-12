@@ -10,6 +10,7 @@ export const addDeployCommand = (program: Command, debugHook: (cmd: Command) => 
     .description('Deploy a smart contract on a Tezos network.')
       .option('-c, --contract <contract>', 'Compile a single smart contract source file')
       .option('-n, --network <network>', `Choose to perform origination in, either ${ToolchainNetworks.SANDBOX}, ${ToolchainNetworks.TESTNET} or ${ToolchainNetworks.MAINNET} networks.`)
+      .option('--old-build', 'Use the latest contract build found instead of stopping/rebuilding')
     .action((options) => {
       deploy(options);
     })
@@ -38,6 +39,7 @@ export const deploy = async (options: any) => {
   const defaultOptions: DeployCommandOptions = {
     network: ToolchainNetworks.SANDBOX,
     contract,
+    oldBuild: false,
   };
 
   // Build final options
