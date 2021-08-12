@@ -14,8 +14,11 @@ export type Config = {
   ligoVersion: LIGOVersions;
   preferredLigoFlavor: LIGOFlavors;
 
-  // Automatic compilation on old/missing build file
+  // Automatic compilation on old/missing build file when testing/deploying
   autoCompile: boolean;
+
+  // Automatic start/stop sandbox when testing (does NOT work for deploy)
+  autoSandbox: boolean;
 
   // Sandbox Settings
   sandbox: {

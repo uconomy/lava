@@ -18,6 +18,9 @@ import { Config } from "./types";
   // Automatic compilation on old/missing build file
   autoCompile: false,
 
+  // Automatic start/stop sandbox when testing (does NOT work for deploy)
+  autoSandbox: false,
+
   // Sandbox Settings
   sandbox: {
     host: "localhost",

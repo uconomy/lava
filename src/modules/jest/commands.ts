@@ -4,6 +4,9 @@ import { spawn } from "child_process";
 import { debug, error, getCWD } from "../../console";
 import { ContractsBundle } from "../bundle";
 import { JestCommandEnv, JestCommandOptions } from "./types";
+import { ToolchainNetworks } from "../config";
+import { isFlextesaRunning, stopFlextesa } from "../flextesa";
+import { startSandbox } from "../../commands/start-sandbox";
 
 const launchTests = async (options: JestCommandOptions): Promise<void> => {
   return new Promise(async (resolve, reject) => {
@@ -54,5 +57,26 @@ const launchTests = async (options: JestCommandOptions): Promise<void> => {
 };
 
 export const testWithJest = async (bundle: ContractsBundle, options: JestCommandOptions) => {
+  let internalSandbox = false;
+
+  if (options.network === ToolchainNetworks.SANDBOX) {
+    if (!await isFlextesaRunning()) {
+      const config = await bundle.readConfigFile();
+      if (!config.autoSandbox) {
+        error(`ERROR: Unable to find a running Sandbox to deploy testing contracts.\nYou can turn on "autoSandbox" in config.json to make it automatically start/stop during tests,\nor control it yourself with the start-sandbox command.`);
+        process.exit(1);
+      }
+      
+      internalSandbox = true;
+
+      // Await sandbox preparation
+      await new Promise<void>((resolve) => startSandbox({}, resolve));
+    }
+  }
+
   await launchTests(options);
+
+  if (internalSandbox) {
+    await stopFlextesa();
+  }
 };

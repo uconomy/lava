@@ -6,7 +6,7 @@ import { createAccountsParams, createProtocolParams, flextesaProtocols } from ".
 import { FlextesaOptions } from "./types";
 
 // Name for the running Docker image
-const POD_NAME = 'flextesa-sandbox';
+export const POD_NAME = 'flextesa-sandbox';
 
 const defaultProtocol = TezosProtocols.FLORENCE;
 const defaultOptions: FlextesaOptions = defaultConfig.sandbox;
@@ -16,7 +16,7 @@ const startLine = "Flextesa: Please enter command:";
 
 let closed = true;
 
-export const startFlextesa = (_options: Partial<FlextesaOptions>) => {
+export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?: () => void) => {
   log(`Preparing Flextesa sandbox...`);
 
   // Merge with defaults
@@ -116,11 +116,15 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>) => {
       });
 
       em(`Tezos sandbox is ready!`);
+
+      if (readyCallback) {
+        readyCallback();
+      }
     }
   });
 };
 
-const stopFlextesa = async (callback?: () => void) => {
+export const stopFlextesa = async (callback?: () => void) => {
   closed = true;
 
   try {
@@ -128,4 +132,14 @@ const stopFlextesa = async (callback?: () => void) => {
   } catch (e) {}
 
   callback && callback();
+};
+
+export const isFlextesaRunning = async (): Promise<boolean> => {
+  try {
+    const buffer = execSync(`docker ps -f name=${POD_NAME} -q`);
+
+    return buffer.length !== 0;
+  } catch (e) {
+    return false;
+  }
 };

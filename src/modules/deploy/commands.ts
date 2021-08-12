@@ -4,9 +4,15 @@ import { compile } from '../../commands/compile';
 import { error, warn, em } from "../../console";
 import { BuildErrorCodes, ContractsBundle } from "../bundle";
 import { Config, ToolchainNetworks } from "../config";
+import { isFlextesaRunning } from '../flextesa';
 import { DeployCommandOptions } from "./types";
 
 const deployInSandbox = async (contract: Contract, config: Config) => {
+  if (!await isFlextesaRunning()) {
+    error(`ERROR: Unable to find a running Sandbox to deploy contracts.\nPlease get it running via the start-sandbox command.`);
+    process.exit(1);
+  }
+
   launchDeployer({
     contracts: [contract],
     endpoint: {

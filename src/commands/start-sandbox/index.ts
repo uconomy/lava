@@ -19,7 +19,7 @@ export const addStartSandboxCommand = (program: Command, debugHook: (cmd: Comman
 }
 
 // Full start-sandbox command controller
-export const startSandbox = async (options: any) => {
+export const startSandbox = async (options: any, readyCallback?: () => void) => {
   em(`Starting Tezos sandbox...\n`);
 
   // Read configfile
@@ -29,5 +29,5 @@ export const startSandbox = async (options: any) => {
   // Build final options
   const flextesaOptions = Object.assign({}, config.sandbox, options);
 
-  startFlextesa(flextesaOptions);
+  startFlextesa(flextesaOptions, readyCallback);
 };
