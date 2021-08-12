@@ -7,10 +7,10 @@ export enum TezosProtocols {
 }
 
 export type FaucetAccount = {
-  mnemonic: string[15];
+  mnemonic: string[];
   secret: string;
   amount: string; // mutez
   pkh: string;
-  password: string;
+  password?: string;
   email: string;
 };
