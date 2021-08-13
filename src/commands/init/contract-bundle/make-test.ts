@@ -48,7 +48,6 @@ const makeFullTest = (name: string, contractFile: string) => (
     expect(Number(contractStorage)).toBe(storage - decrement);
   });
 });
-
 `);
 
 const makeEmptyTest = (name: string, contractFile: string) => (
@@ -63,7 +62,6 @@ const makeEmptyTest = (name: string, contractFile: string) => (
     expect(Number(contractStorage)).toBe(storage);
   });
 })
-
 `);
 
 export const makeTest = (name: string, contractFile: string, hasExamples: boolean) =>

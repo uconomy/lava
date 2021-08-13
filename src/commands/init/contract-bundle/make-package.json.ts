@@ -1,9 +1,9 @@
-export const makePackageJSON = (name: string) => ({
+export const makePackageJSON = (name: string, packageVersion: string) => ({
   name,
   version: "0.0.1",
   description: `${name} Tezos smart contract repository.`,
   dependencies: {
-    // "create-tezos-smart-contract": "^0.0.1",
+    "create-tezos-smart-contract": packageVersion,
     "@taquito/signer": "^9.1.1",
     "@taquito/taquito": "^9.1.1",
     "jest": "^27.0.6"

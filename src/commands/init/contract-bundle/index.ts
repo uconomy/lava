@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 import { error } from "../../../console";
 import { createBundle } from "../../../modules/bundle";
 import { Config, ConfigFile } from "../../../modules/config";
@@ -7,6 +8,7 @@ import { makeJestConfig } from "./make-jest-config";
 import { makePackageJSON } from "./make-package.json";
 import { makeREADME } from "./make-readme";
 import { makeTest } from './make-test';
+import { makeE2ETest } from './make-e2e-test';
 
 export type ContractBundleOptions = {
   basePath: string;
@@ -49,7 +51,10 @@ export const makeContractBundle = async (params: ContractBundleOptions) => {
   await bundle.writeTextFile('jest.config.js', makeJestConfig(config.repoName));
 
   // package.json
-  await bundle.writeJSONFile('package.json', makePackageJSON(config.repoName));
+  const packageJSON = fs.readFileSync(path.resolve(__dirname, '..', '..', '..', '..', 'package.json'));
+  const app = JSON.parse(packageJSON.toString());
+
+  await bundle.writeJSONFile('package.json', makePackageJSON(config.repoName, app.version));
 
   // Generate contract filename
   const contractFileName = getContractFileName(config.preferredLigoFlavor, config.repoName);
@@ -57,9 +62,11 @@ export const makeContractBundle = async (params: ContractBundleOptions) => {
   // Example files or only placeholders?
   let contractData = '';
   let testData = makeTest(config.repoName, contractFileName, false);
+  let e2eTestData = makeE2ETest(config.repoName, contractFileName, false);
   if (hasExamples) {
     contractData = makeContractFile(config.preferredLigoFlavor);
     testData = makeTest(config.repoName, contractFileName, true);
+    e2eTestData = makeE2ETest(config.repoName, contractFileName, true);
   }
 
   // Write contract file
@@ -72,5 +79,11 @@ export const makeContractBundle = async (params: ContractBundleOptions) => {
   await bundle.writeTextFile(
     path.join('test', `${config.repoName}.test.js`),
     testData,
+  );
+
+  // Write E2E test file
+  await bundle.writeTextFile(
+    path.join('test', `${config.repoName}.e2e.js`),
+    e2eTestData,
   );
 };
