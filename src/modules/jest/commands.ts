@@ -18,10 +18,24 @@ const launchTests = async (options: JestCommandOptions): Promise<void> => {
       "--colors",
     ];
 
+    if (options.e2e) {
+      args.push(
+        "--testMatch='**/*.e2e.js'",
+        "--runInBand"
+      )
+    }
+
     const env: JestCommandEnv = {
       ...process.env,
+      TEZOS_NETWORK: options.network,
       USE_OLD_BUILD: options.oldBuild ? 'true' : 'false',
     };
+
+    if (options.deployedContracts) {
+      env.DEPLOYED_CONTRACTS = Object.keys(options.deployedContracts)
+        .map(contract => `${contract}:${options.deployedContracts?.[contract]}`)
+        .join(';');
+    }
 
     console.log(chalk.reset());
     try {

@@ -19,22 +19,24 @@ const jestGlobal = global as unknown as CustomJestGlobals & AugmentedJestGlobal;
 
 // Setup the basic Taquito client
 const Tezos = new TezosToolkit(jestGlobal.tezosRPCNode);
+let isSignerSet = false;
 
 // Internal functions
-const _setSigner = (signer: TezosSigner) => {
-  if (isFaucet(signer)) {
-    importKey(Tezos, signer.email, signer.password, signer.mnemonic.join(' '), signer.secret);
+const _setSigner = async (signer: TezosSigner) => {
+  if (isSignerSet) {
+    return;
+  }
 
-    Tezos.setProvider({ signer: new InMemorySigner(signer.pkh, signer.password) });
+  if (isFaucet(signer)) {
+    await importKey(Tezos, signer.email, signer.password, signer.mnemonic.join(' '), signer.secret);
   } else {
     Tezos.setProvider({
       signer: new InMemorySigner(signer),
     });
   }
-};
 
-// Set default signer as expected in config
-_setSigner(jestGlobal.tezosDefaultSigner);
+  isSignerSet = true;
+};
 
 const bundle = new ContractsBundle(jestGlobal.tezosCWD);
 let config: Config;
@@ -45,7 +47,7 @@ const handleOutdatedBuildfile = async (contractName: string) => {
   if (USE_OLD_BUILD === 'true') {
     return; // Go on with testing
   } else {
-    // Cache config for all the tests to spped up the process
+    // Cache config for all the tests to speed up the process
     if (!config) {
       config = await bundle.readConfigFile();
     }
@@ -112,7 +114,23 @@ const validateContract = async (contractName: string) => {
   return code;
 };
 
-const deployContract = async (contractName: string, storage: any, signer: TezosSigner = jestGlobal.tezosDefaultSigner) => {
+const deployContract = async (contractName: string, storage: any, signer: TezosSigner = jestGlobal.tezosDefaultSigner): Promise<ContractAbstraction<ContractProvider>> => {
+  // Set default signer as expected in config
+  await _setSigner(jestGlobal.tezosDefaultSigner);
+
+  if (jestGlobal.tezosDeployedContracts && jestGlobal.tezosDeployedContracts[contractName]) {
+    const contractAddress = jestGlobal.tezosDeployedContracts[contractName];
+
+    // Retrieve contract in the selected netwoek
+    try {
+      const res = await Tezos.contract.at(contractAddress);
+
+      return res;
+    } catch (err) {
+      throw new Error(`ERROR while accessing contract "${contractName}" at "${contractAddress}":\n\n\t${err.message}.`);
+    }
+  }
+
   const code = await validateContract(contractName);
   if (!code) {
     throw new Error(`Unable to process contract ${contractName}, deploy failed.`);
@@ -146,4 +164,4 @@ jestGlobal.deployContract = deployContract;
 jestGlobal.toBytes = toBytes;
 
 // Extend jest timeout
-jest.setTimeout(30000);
+jest.setTimeout(40000);

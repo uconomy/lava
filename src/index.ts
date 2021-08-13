@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import { addCompileCommand } from './commands/compile';
 import { addDeployCommand } from './commands/deploy';
+import { addE2ETestCommand } from './commands/e2e-test';
 import { addInitCommand } from './commands/init';
 import { addStartSandboxCommand } from './commands/start-sandbox';
 import { addTestCommand } from './commands/test';
@@ -41,6 +42,7 @@ addInitCommand(program, debugHook);
 addStartSandboxCommand(program, debugHook);
 addCompileCommand(program, debugHook);
 addTestCommand(program, debugHook);
+addE2ETestCommand(program, debugHook);
 addDeployCommand(program, debugHook);
 
 program.parse(process.argv);
