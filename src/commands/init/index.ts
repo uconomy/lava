@@ -87,4 +87,9 @@ export const init = async (name?: string) => {
     config,
     hasExamples,
   });
+
+  log('\nRepository creation is done!\n\n\n');
+  
+  em('Please install dependencies running the following command:\n\n');
+  log(`cd ${config.repoName} && npm i`);
 };
