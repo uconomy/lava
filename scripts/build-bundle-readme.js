@@ -10,9 +10,7 @@ const { readTextFile, contractFolder, contractBundlePath, initBundlePath, writeT
   const dest = initBundlePath("make-readme.ts");
 
   const data = 
-`import { Bundle } from "../../../bundle";
-
-export const makeREADME = (bundle: Bundle) =>
+`export const makeREADME = (name: string) =>
 \`${stringifiedContent}
 \`;
 `;
