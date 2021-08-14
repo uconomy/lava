@@ -3,11 +3,11 @@
 So you want to write a smart-contract for the [Tezos blockchain](https://www.tezos.com)? You're in the right place!
 
 ## Requirements
-This toolset it's entirely based on [Docker](https://www.docker.com) and [Node.js](https://nodejs.org/).
+This toolset is entirely based on [Docker](https://www.docker.com) and [Node.js](https://nodejs.org/).
 
-You can download Docker Desktop for your operative system at https://www.docker.com/products/docker-desktop. When download is ready, you can proceed to install it.
+You can download Docker Desktop for your OS at https://www.docker.com/products/docker-desktop. When download is ready, you can proceed to install it.
 
-Same goes for Node.js, for which we suggest you download the LTS version for your system at https://nodejs.org/.
+Same goes for Node.js, for which we suggest the LTS version for your system at https://nodejs.org/.
 
 ## Getting started
 To use this toolset, just open a Terminal and type:
@@ -16,7 +16,7 @@ To use this toolset, just open a Terminal and type:
 npx create-tezos-smart-contract
 ```
 
-This will guide you trough the basic setup of the environment to start coding your contracts right away.
+This will guide you through the basic setup of the environment to start coding your contracts right away.
 
 ## Usage
 [Created repository's README](./contract-bundle/REAME.md) will guide you over the entire toolset.
