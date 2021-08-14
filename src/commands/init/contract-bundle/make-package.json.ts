@@ -9,10 +9,12 @@ export const makePackageJSON = (name: string, packageVersion: string) => ({
     "jest": "^27.0.6"
   },
   scripts: {
-    "compile": "node ./scripts/toolchain/compile",
-    "start-sandbox": "node ./scripts/toolchain/start-sandbox",
-    "stop-sandbox": "docker kill my-sandbox",
-    "test": "jest"
+    "start": "npx tezos-sdk -- --help",
+    "compile": "npx tezos-sdk compile",
+    "start-sandbox": "npx tezos-sdk start-sandbox",
+    "e2e-test": "npx tezos-sdk e2e-test",
+    "test": "npx tezos-sdk test",
+    "deploy": "npx tezos-sdk deploy"
   },
   keywords: [
     "tezos",

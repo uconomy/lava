@@ -1,14 +1,17 @@
 {
   "name": "create-tezos-smart-contract",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Node.js toolset to write, test and deploy Tezos smart contracts",
-  "main": "index.js",
+  "bin": {
+    "create-tezos-smart-contract": "./dist/entrypoint.js",
+    "tezos-sdk": "./dist/index.js"
+  },
   "files": [
     "dist/**/*"
   ],
   "scripts": {
     "test": "jest",
-    "start": "npm run build && node dist/index.js --debug --folder ./output/test",
+    "start": "node dist/index.js",
     "build": "rm -rf dist/* && tsc",
     "try-init": "npm run build && mkdir output && rm -rf output/* && node dist/index.js --debug --folder ./output/ init test",
     "try-start-sandbox": "npm run build && node dist/index.js --debug --folder ./output/test start-sandbox",
@@ -57,6 +60,7 @@
     "args": "^5.0.1",
     "chalk": "^4.1.1",
     "commander": "^8.0.0",
-    "inquirer": "^8.1.1"
+    "inquirer": "^8.1.1",
+    "tezos-builder-suite": "^0.1.0"
   }
 }

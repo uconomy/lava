@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { Command } from 'commander';
 import { addCompileCommand } from './commands/compile';
 import { addDeployCommand } from './commands/deploy';
