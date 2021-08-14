@@ -65,3 +65,6 @@ You can request support, give feedback, suggest features and donate to this proj
 - Uconomy developers Discord [https://discord.gg/Cabq36FVRh](https://discord.gg/Cabq36FVRh)
 
 If you need help with code we'd suggest going for the Discord channel as it's easier to exchange code there.
+
+## Donate
+Want to help us with our coffee expenses? Here's our donation address tz1QBdqczeKCC6TW23MVrNXW217D5JomKzuL
