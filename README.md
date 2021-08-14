@@ -19,7 +19,7 @@ npx create-tezos-smart-contract
 This will guide you through the basic setup of the environment to start coding your contracts right away.
 
 ## Usage
-[Created repository's README](./contract-bundle/REAME.md) will guide you over the entire toolset.
+[Created repository's README](./contract-bundle/README.md) will guide you over the entire toolset.
 
 ## Features
 - Smart Contract(s) repository setup with just 1 command
