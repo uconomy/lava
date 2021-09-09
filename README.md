@@ -1,6 +1,8 @@
+![Lava](./docs/images/lava-logo.png)
+
 # Get your Tezos Smart Contracts production-ready
 
-So you want to write a smart-contract for the [Tezos blockchain](https://www.tezos.com)? You're in the right place!
+So you want to write a smart-contract for the [Tezos blockchain](https://www.tezos.com)? You're at the right place!
 
 ## Requirements
 This toolset is entirely based on [Docker](https://www.docker.com) and [Node.js](https://nodejs.org/).
@@ -34,7 +36,7 @@ Because we wanted Tezos development to follow a full process to release great pr
 ## Why a toolset?
 Tezos ecosystem now offers a lot of different tools to code, compile, test and interact with Smart Contracts. The problem is that sometimes you need to install software directly on your machine, sometimes you're prompted to use Docker and sometimes you might end up just with a big mess of separate tools which is also difficult to maintain and update as the Tezos protocol releases come out.
 
-With `create-tezos-smart-contract` we'll bring together the latest updates of every single tool for you, you just need to use our last version.
+With `lava` we'll bring together the latest updates of every single tool for you, you just need to use our last version.
 
 ## Why not Truffle?
 [Truffle](https://www.Trufflesuite.com) offers one of the easiest ways to develop Tezos Smart Contracts. However, there were several choices in Truffle that made us decide to develop our own toolchain:
