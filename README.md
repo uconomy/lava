@@ -1,7 +1,5 @@
 <p align="center">
-  <a href="https://yarnpkg.com/">
     <img alt="Lava" src="./docs/images/lava-logo.png" width="546">
-  </a>
 </p>
 
 # Get your Tezos Smart Contracts production-ready
