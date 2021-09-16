@@ -1,5 +1,6 @@
 import { spawn } from "child_process";
 import path from 'path';
+import os from 'os';
 import { debug, error, getCWD, log } from "../../console";
 import { ContractsBundle } from "../bundle";
 import { ensureImageIsPresent } from "../docker";
@@ -63,11 +64,13 @@ const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions,
       michelson: "",
     };
 
+    const mappedFolder = os.platform() === "win32" ? '/cd' : cwd;
+
     const args = [
       "run",
       "--rm",
-      "-v", `${cwd}:${cwd}`,
-      "-w", `${cwd}`,
+      "-v", `${cwd}:${mappedFolder}`,
+      "-w", `${mappedFolder}`,
       ligoImage,
       "compile-contract",
       "--michelson-format=json",
