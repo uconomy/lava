@@ -1,4 +1,4 @@
-import { LIGOFlavors, LIGOVersions } from "../ligo";
+import { LIGOFlavors, LIGOVersions, MINIMUM_LIGO_VERSION } from "../ligo";
 import { TezosProtocols } from "../tezos";
 import { Config } from "./types";
 
@@ -12,7 +12,7 @@ import { Config } from "./types";
   repoName: "tezos-smart-contract",
   
   // LIGO Settings
-  ligoVersion: LIGOVersions.next,
+  ligoVersion: MINIMUM_LIGO_VERSION,
   preferredLigoFlavor: LIGOFlavors.PascaLIGO,
 
   // Automatic compilation on old/missing build file
