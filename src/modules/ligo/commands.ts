@@ -1,11 +1,11 @@
 import { spawn } from "child_process";
 import path from 'path';
 import os from 'os';
-import { debug, error, getCWD, log } from "../../console";
+import { debug, error, getCWD, log, warn } from "../../console";
 import { ContractsBundle } from "../bundle";
 import { ensureImageIsPresent } from "../docker";
 import { isLigoVersionLT } from "./parameters";
-import { BuildData, LigoCompilerOptions, LIGOVersions } from "./types";
+import { BuildData, LigoCompilerOptions, LIGOVersions, MINIMUM_LIGO_VERSION } from "./types";
 
 const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions, bundle: ContractsBundle): Promise<void> => {
   return new Promise(async (resolve, reject) => {
@@ -48,6 +48,14 @@ const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions,
         error(`You are trying to recompile a smart contract with an earlier version of LIGO. This is forbidden, but you can force this passing -f to compile command.`);
         return;
       }
+    }
+
+    if (ligoVersion === 'next') {
+      warn(`Your preference for the LIGO compiler version is set to "next", which might lead to non-working setups for three reasons:\n` +
+      ` 1) LIGO compiler is downloaded during the project's initial setup. "next" was the latest available LIGO version during the first project setup on this machine. LIGO won't be updated automatically even if new releases are issued;\n`+
+      ` 2) If the CLI interface of LIGO is changed, the toolchain might not be able to compile your contracts anymore;\n` +
+      ` 3) Your contract's code might not be compatible with newer versions of the LIGO compiler.\n`+
+      `\nPlease consider using a specific LIGO compiler version, editing the "ligoVersion" property in config.json. Last supported version is: ${MINIMUM_LIGO_VERSION}`);
     }
 
     const cwd = getCWD();
