@@ -39,7 +39,7 @@
     "smartcontract"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/uconomy/create-tezos-smart-contract/issues"
   },
