@@ -1,6 +1,6 @@
 import { LIGOVersions } from "./types";
 
-export const isLigoVersionLT = (compare: LIGOVersions, to: LIGOVersions) => {
+export const isLigoVersionLT = (compare: LIGOVersions, to: LIGOVersions): boolean => {
   if (compare === LIGOVersions.next) {
     return false;
   } else {

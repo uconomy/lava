@@ -1,12 +1,14 @@
 export enum LIGOVersions {
-  'next'  = "next",
-  '.25'   = "0.25.0",
+  'next' = "next",
+  '.25'  = "0.25.0",
+  '.24'  = "0.24.0",
   // '.20'   = "0.20.0", // Deprecated
   // '.19'   = "0.19.0", // Deprecated
   // '.18'   = "0.18.0", // Deprecated
 }
 
-export const MINIMUM_LIGO_VERSION = LIGOVersions[".25"];
+export const MINIMUM_LIGO_VERSION = LIGOVersions[".24"];
+export const DEFAULT_LIGO_VERSION = LIGOVersions[".25"];
 
 export enum LIGOFlavors {
   PascaLIGO = 'pascaligo',
