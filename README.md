@@ -27,7 +27,7 @@ This will guide you through the basic setup of the environment to start coding y
 
 ## Features
 - Smart Contract(s) repository setup with just 1 command
-- [**LIGO Compiler**](https://ligolang.org), dockerized, at the version you like (default version is *LIGO next*)
+- [**LIGO Compiler**](https://ligolang.org), dockerized, at the version you like (default version is LIGO latest release)
 - **[Flextesa](https://gitlab.com/tezos/flextesa) local environment**, dockerized, to run Tezos test networks (node) at any version up to **Granada**
 - [**Jest**](https://jestjs.io), with a proper setup to write both unit and E2E tests with [Taquito](https://tezostaquito.io)
 - [**Deploy UI**](https://github.com/uconomy/tezos-builder-suite), designed to make your life easier. Helps you build your initial storage and lets you deploy in sandbox, testnet or mainnet. Works with faucet accounts and the Beacon SDK, to let you choose yout preferred wallet for signing
