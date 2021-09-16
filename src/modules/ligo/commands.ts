@@ -2,11 +2,20 @@ import { spawn } from "child_process";
 import path from 'path';
 import { debug, error, getCWD, log } from "../../console";
 import { ContractsBundle } from "../bundle";
+import { ensureImageIsPresent } from "../docker";
 import { isLigoVersionLT } from "./parameters";
 import { BuildData, LigoCompilerOptions, LIGOVersions } from "./types";
 
 const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions, bundle: ContractsBundle): Promise<void> => {
   return new Promise(async (resolve, reject) => {
+    const ligoImage = `ligolang/ligo:${ligoVersion}`;
+
+    const image = await ensureImageIsPresent(ligoImage);
+    if (!image) {
+      error('Unable to find LIGO image, compilation failed.');
+      return;
+    }
+
     log(`🚀 Compiling contract "${contractFileName}"...`);
 
     debug("\t👓 Reading source...");
@@ -59,7 +68,7 @@ const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions,
       "--rm",
       "-v", `${cwd}:${cwd}`,
       "-w", `${cwd}`,
-      `ligolang/ligo:${ligoVersion}`,
+      ligoImage,
       "compile-contract",
       "--michelson-format=json",
       `${sourcePath}`,
@@ -67,6 +76,8 @@ const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions,
     ];
 
     debug(`\t🔥 Compiling with LIGO (${ligoVersion})...`);
+    debug(`\t   Running LIGO compile command:\ndocker ${args.join(' ')}`);
+
     const ligo = spawn("docker", args, {});
 
     ligo.on("close", async () => {
@@ -88,7 +99,9 @@ const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions,
     });
 
     ligo.stderr.on("data", (data) => {
-      error(data.toString());
+      const message = data.toString();
+
+      error(message);
       reject(ligo.stderr);
       process.exit(1);
     });
