@@ -1,6 +1,6 @@
 import path from 'path';
 
-export const makeJestConfig = (name: string) => (
+export const makeJestConfig = (): string => (
 `/*
 * For a detailed explanation regarding each configuration property, visit:
 * https://jestjs.io/docs/configuration

@@ -14,7 +14,8 @@ export const makePackageJSON = (name: string, packageVersion: string) => ({
     "start-sandbox": "npx tezos-sdk start-sandbox",
     "e2e-test": "npx tezos-sdk e2e-test",
     "test": "npx tezos-sdk test",
-    "deploy": "npx tezos-sdk deploy"
+    "deploy": "npx tezos-sdk deploy",
+    "postinstall": "npx tezos-sdk postinstall",
   },
   keywords: [
     "tezos",

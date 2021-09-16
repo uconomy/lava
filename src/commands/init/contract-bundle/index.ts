@@ -48,7 +48,7 @@ export const makeContractBundle = async (params: ContractBundleOptions) => {
   await bundle.writeJSONFile(ConfigFile.getName(), configFile.config, true);
 
   // Jest config
-  await bundle.writeTextFile('jest.config.js', makeJestConfig(config.repoName));
+  await bundle.writeTextFile('jest.config.js', makeJestConfig());
 
   // package.json
   const packageJSON = fs.readFileSync(path.resolve(__dirname, '..', '..', '..', '..', 'package.json'));
