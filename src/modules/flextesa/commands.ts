@@ -14,9 +14,7 @@ const defaultOptions: FlextesaOptions = defaultConfig.sandbox;
 // This is to avoid printing flextesa full-console in output
 const startLine = "Flextesa: Please enter command:";
 
-let closed = true;
-
-export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?: () => void) => {
+export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?: () => void): void => {
   log(`Preparing Flextesa sandbox...`);
 
   // Merge with defaults
@@ -52,7 +50,8 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?
      * --no-daemons-for on every added account. This would have Flextesa not baking
      * anything, so the header block would be empty and Taquito does not really like it!
      */
-    "--time-between-blocks", "1",
+    "--time-between-blocks", "2",
+    "--minimal-block-delay", "1",
     "--pause-on-error=true",
     ...accountsParams,
     ...tezosNodeParams
@@ -92,17 +91,11 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?
       debug(str);
     } else { // But when we reach it, Flextsa is ready
       stderr = "";
-      closed = false;
 
       // unbind the now unused listeners for boot problems...
       flextesa.removeListener("close", onClosed);
       flextesa.removeListener("error", onErrored);
       flextesa.stderr.removeListener("data", fn);
-
-      // Append official close listener now
-      flextesa.on("close", () => {
-        closed = true;
-      });
 
       // Print general output
       flextesa.stdout.on("data", (data) => {
@@ -124,12 +117,12 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?
   });
 };
 
-export const stopFlextesa = async (callback?: () => void) => {
-  closed = true;
-
+export const stopFlextesa = (callback?: () => void): void => {
   try {
     execSync(`docker rm -f ${POD_NAME}`);
-  } catch (e) {}
+  } catch (e) {
+    error('Stopping Flextesa thrown:', e);
+  }
 
   callback && callback();
 };
