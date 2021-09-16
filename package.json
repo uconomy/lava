@@ -1,6 +1,6 @@
 {
   "name": "create-tezos-smart-contract",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Node.js toolset to write, test and deploy Tezos smart contracts",
   "bin": {
     "create-tezos-smart-contract": "./dist/entrypoint.js",
@@ -20,6 +20,7 @@
     "try-test": "npm run build && node dist/index.js --debug --folder ./output/test test",
     "try-e2e-test": "npm run build && node dist/index.js --debug --folder ./output/test e2e-test",
     "try-deploy": "npm run build && node dist/index.js --debug --folder ./output/test deploy",
+    "try-postinstall": "npm run build && node dist/index.js --debug --folder ./output/test postinstall",
     "cleanup": "rm -rf output",
     "format": "npx prettier --write ./src/",
     "check-format": "npx prettier --check ./src/",
