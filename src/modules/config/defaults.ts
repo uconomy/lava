@@ -25,7 +25,7 @@ import { Config } from "./types";
   sandbox: {
     host: "localhost",
     port: 20000,
-    protocol: TezosProtocols.FLORENCE,
+    protocol: TezosProtocols.GRANADA,
     genesisBlockHash: "random",
     accounts: {
       alice: {
