@@ -3,6 +3,8 @@ import { LIGOVersions } from "./types";
 export const isLigoVersionLT = (compare: LIGOVersions, to: LIGOVersions): boolean => {
   if (compare === LIGOVersions.next) {
     return false;
+  } else if (compare === to) {
+    return false;
   } else {
     for (const sToken of compare.split('.')) {
       for (const tToken of to.split('.')) {
