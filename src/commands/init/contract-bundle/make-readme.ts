@@ -48,7 +48,7 @@ You can find tests in the \`test\` folder.
 Unit testing is the first step for checking contracts' code correctness. As the name says, they're designed to che check small portions (units) of code.
 As Smart Contracts are stateful, doing unit testing with it can the tricky.
 
-For this reaon, we implemented another command
+For this reason, we implemented another command
 \`\`\`bash
 npm run start-sandbox
 \`\`\`
@@ -56,7 +56,7 @@ or, with Yarn
 \`\`\`bash
 yarn start-sandbox
 \`\`\`
-to easily start a local Sanboxed environment (local Tezos network) which processes blockchain packages much faster than real Tezos network. This makes you able to **deploy a separate contract** with a determined storage for every single unit test you might want to run.
+to easily start a local Sandboxed environment (local Tezos network) which processes blockchain packages much faster than real Tezos network. This makes you able to **deploy a separate contract** with a determined storage for every single unit test you might want to run.
 
 Then you just need to run
 \`\`\`bash
@@ -66,7 +66,7 @@ or, with Yarn
 \`\`\`bash
 yarn test
 \`\`\`
-and you'll see your tests being performed. If you want the local sanbox to be started and stopped automatically every test run, please set \`autoSandbox: true\` in your *config.json*.
+and you'll see your tests being performed. If you want the local sandbox to be started and stopped automatically every test run, please set \`autoSandbox: true\` in your *config.json*.
 
 ### End-to-end (E2E) Testing
 End-to-end testing is tought to be simulating user interaction with your smart contract. This is to ensure that the expected usage of your contract produces the expexted storage/operations in the Tezos blockchain.
