@@ -24,6 +24,9 @@ export const test = async (program: Command, options: any) => {
   // Read configfile
   const contractsBundle = new ContractsBundle(getCWD());
 
+  // Read the config so contracts folder settings will be there later
+  await contractsBundle.readConfigFile();
+
   // Prepare options
   const defaultOptions: JestCommandOptions = {
     network: ToolchainNetworks.SANDBOX,

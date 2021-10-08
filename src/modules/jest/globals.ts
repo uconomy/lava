@@ -131,6 +131,8 @@ const deployContract = async (contractName: string, storage: any, signer: TezosS
     }
   }
 
+  await bundle.readConfigFile();
+
   const code = await validateContract(contractName);
   if (!code) {
     throw new Error(`Unable to process contract ${contractName}, deploy failed.`);

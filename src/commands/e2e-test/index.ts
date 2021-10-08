@@ -42,6 +42,9 @@ export const test = async (program: Command, options: any) => {
   // Force E2E testing
   testOptions.e2e = true;
 
+  // Read the config so contracts folder settings will be there later
+  await contractsBundle.readConfigFile();
+
   if (contracts) {
     const contractNames = await contractsBundle.getContractsFiles();
 
