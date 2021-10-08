@@ -11,7 +11,7 @@ type AugmentedJestGlobal = {
 
   toBytes(str: string): string;
 
-  _checkedContracts?: { [x: string]: object[] | false },
+  _checkedContracts?: { [x: string]: Record<string, unknown>[] | false },
 }
 
 // This is needed to infer a type to Jest context's global variable
@@ -102,7 +102,7 @@ const validateContract = async (contractName: string) => {
   }
 
   // Parse JSON-michelson
-  let code: object[] = [];
+  let code: Record<string, unknown>[] = [];
   try {
     code = JSON.parse(buildFile.michelson);
   } catch (err) {
@@ -127,7 +127,7 @@ const deployContract = async (contractName: string, storage: any, signer: TezosS
 
       return res;
     } catch (err) {
-      throw new Error(`ERROR while accessing contract "${contractName}" at "${contractAddress}":\n\n\t${err.message}.`);
+      throw new Error(`ERROR while accessing contract "${contractName}" at "${contractAddress}":\n\n\t${(err as Error).message}.`);
     }
   }
 
@@ -149,7 +149,7 @@ const deployContract = async (contractName: string, storage: any, signer: TezosS
     const res = await op.contract();
     return res;
   } catch (err) {
-    throw new Error(`ERROR while deploying contract ${contractName}:\n\n\t${err.message}.\n\nPlease review test's storage configuration and make sure it matches contract's expected values.`);
+    throw new Error(`ERROR while deploying contract ${contractName}:\n\n\t${(err as Error).message}.\n\nPlease review test's storage configuration and make sure it matches contract's expected values.`);
   }
 };
 
