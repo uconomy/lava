@@ -21,7 +21,9 @@ export const addDeployCommand = (program: Command, debugHook: (cmd: Command) => 
 export const deploy = async (options: any) => {
   // Read configfile
   const contractsBundle = new ContractsBundle(getCWD());
-  // const {  } = await contractsBundle.readConfigFile();
+
+  // Read the config so contracts folder settings will be there later
+  await contractsBundle.readConfigFile();
 
   const contracts = await contractsBundle.getContractsFiles();
   if (contracts.length === 0) {
