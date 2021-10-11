@@ -46,8 +46,8 @@ With `lava` we'll bring together the latest updates of every single tool for you
 - The inability to control your development flow in detail (contracts compiled everytime no matter what you needed)
 - The usage of a custom library to write tests, not standard
 - The usage of a custom library to interact with Tezos contracts in tests, not documented, you'd end up writing less tests because no documentation could be found on how to code them
-- Truffle was born with Ethereum in mind. Let's be honest: all the Truffle toolset with UI is great for Ethereum, but the lack of it for Tezos makes it seem more like a less-maintained extension of Truffle instead of the real deal
-- And, last but not least, Truffle codebase is full of Ethereum content. This made us decide not to contribute on that codebase, but rather to start a new and clean one, always open source.
+- Truffle was born with Ethereum in mind. Let's be honest: all the Truffle toolset with UI is great for Ethereum, but the lack of it for Tezos makes it seem more like a less-maintained adapted version of Truffle instead of a genuine Tezos toolset
+- And, last but not least, Truffle's dedicated Tezos branch is still full of Ethereum content. This made us decide not to contribute on that codebase, but rather to start a new and clean one, always open source.
 
 ## Supported development Tezos protocols
 - Granada
