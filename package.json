@@ -28,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uconomy/create-tezos-smart-contract.git"
+    "url": "git+https://github.com/uconomy/lava.git"
   },
   "keywords": [
     "tezos",
@@ -39,12 +39,12 @@
     "blockchain",
     "smartcontract"
   ],
-  "author": "",
+  "author": "uconomy <devhub@uconomy.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/uconomy/create-tezos-smart-contract/issues"
+    "url": "https://github.com/uconomy/lava/issues"
   },
-  "homepage": "https://github.com/uconomy/create-tezos-smart-contract#readme",
+  "homepage": "https://github.com/uconomy/lava#readme",
   "devDependencies": {
     "@types/inquirer": "^7.3.3",
     "@types/jest": "^26.0.24",
