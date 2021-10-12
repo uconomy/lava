@@ -6,11 +6,13 @@ export const isLigoVersionLT = (compare: LIGOVersions, to: LIGOVersions): boolea
   } else if (compare === to) {
     return false;
   } else {
-    for (const sToken of compare.split('.')) {
-      for (const tToken of to.split('.')) {
-        if (parseInt(sToken) < parseInt(tToken)) {
-          return true;
-        }
+    const comp_version = compare.split(".");
+    const to_version = compare.split(".");
+    for (let i = 0; i < to_version.length; i++) {
+      const sToken = comp_version[i];
+      const tToken = to_version[i];
+      if (parseInt(sToken) < parseInt(tToken)) {
+        return true;
       }
     }
 
