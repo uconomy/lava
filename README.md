@@ -28,7 +28,7 @@ This will guide you through the basic setup of the environment to start coding y
 ## Features
 - Smart Contract(s) repository setup with just 1 command
 - [**LIGO Compiler**](https://ligolang.org), dockerized, at the version you like (default version is LIGO latest release)
-- **[Flextesa](https://gitlab.com/tezos/flextesa) local environment**, dockerized, to run Tezos test networks (node) at any version up to **Granada**
+- **[Flextesa](https://gitlab.com/tezos/flextesa) local Sandbox environment**, dockerized, to run Tezos test networks (node) at any version up to **Hangzhou**
 - [**Jest**](https://jestjs.io), with a proper setup to write both unit and E2E tests with [Taquito](https://tezostaquito.io)
 - [**Deploy UI**](https://github.com/uconomy/tezos-builder-suite), designed to make your life easier. Helps you build your initial storage and lets you deploy in sandbox, testnet or mainnet. Works with faucet accounts and the Beacon SDK, to let you choose yout preferred wallet for signing
 
@@ -50,8 +50,21 @@ With `lava` we'll bring together the latest updates of every single tool for you
 - And, last but not least, Truffle's dedicated Tezos branch is still full of Ethereum content. This made us decide not to contribute on that codebase, but rather to start a new and clean one, always open source.
 
 ## Supported development Tezos protocols
+- Hangzhou
 - Granada
-- Florencenet
+
+__Granada is the default Sandbox protocol version__, but you can easily use Hangzhou by editing `protocol` in the `sandbox` section of `config.json` in your Contracts' repo:
+```jsonc
+{
+    // ...some other settings
+    "sandbox": {
+        // ...
+        "protocol": "hangzhou",
+        // ...
+    },
+    // ...
+}
+```
 
 Might work also with earliers version of the protocol, but we highly discourage working on such versions as you may end up with less features, higher costs and even bugs.
 
