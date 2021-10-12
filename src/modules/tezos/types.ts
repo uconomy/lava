@@ -4,6 +4,7 @@ export enum TezosProtocols {
   EDO = 'edo',
   FLORENCE = 'florence',
   GRANADA = 'granada',
+  HANGZHOU = 'hangzhou',
 }
 
 export type FaucetAccount = {
