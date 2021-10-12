@@ -8,7 +8,7 @@ import { FlextesaOptions } from "./types";
 // Name for the running Docker image
 export const POD_NAME = 'flextesa-sandbox';
 
-const defaultProtocol = TezosProtocols.FLORENCE;
+const defaultProtocol = TezosProtocols.GRANADA;
 const defaultOptions: FlextesaOptions = defaultConfig.sandbox;
 
 // This is to avoid printing flextesa full-console in output
@@ -42,7 +42,7 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?
     host + ":" + port + ":20000",
     "-e",
     "flextesa_node_cors_origin=*",
-    "tqtezos/flextesa:20210602",
+    "tqtezos/flextesa:20210930",
     "flextesa",
     "mini-net",
     "--genesis-block-hash", options.genesisBlockHash,
