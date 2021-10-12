@@ -40,6 +40,8 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?
     POD_NAME,
     "-p",
     host + ":" + port + ":20000",
+    "-e",
+    "flextesa_node_cors_origin=*",
     "tqtezos/flextesa:20210602",
     "flextesa",
     "mini-net",
