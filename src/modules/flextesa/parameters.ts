@@ -6,7 +6,8 @@ export const flextesaProtocols: FlextesaTezosProtocols = {
   [TezosProtocols.DELPHI]: { hash: "PsDELPH1Kxsxt8f9eWbxQeRxkjfbxoqM52jvs5Y5fBxWWh4ifpo", prefix: "007-PsDELPH1", kind: "Delphi" },
   [TezosProtocols.EDO]: { hash: "PtEdo2ZkT9oKpimTah6x2embF25oss54njMuPzkJTEi5RqfdZFA", prefix: "008-PtEdoTez", kind: "Edo" },
   [TezosProtocols.FLORENCE]: { hash: "PsFLorenaUUuikDWvMDr6fGBRG8kt3e3D3fHoXK1j1BFRxeSH4i", prefix: "009-PsFLoren", kind: "Florence"},
-  [TezosProtocols.GRANADA]: { hash: "PtGRANADsDU8R9daYKAgWnQYAJ64omN1o3KMGVCykShA97vQbvV", prefix: "010-PtGRANAD", kind: "Granada" }
+  [TezosProtocols.GRANADA]: { hash: "PtGRANADsDU8R9daYKAgWnQYAJ64omN1o3KMGVCykShA97vQbvV", prefix: "010-PtGRANAD", kind: "Granada" },
+  [TezosProtocols.HANGZHOU]: { hash: "PtHangzHogokSuiMHemCuowEavgYTP8J5qQ9fQS793MHYFpCY3r", prefix: "011-PtHangzH", kind: "Hangzhou" },
 };
 
 export const createProtocolParams = (tezosProtocol: TezosProtocols): string[] => {
@@ -37,7 +38,7 @@ export const createProtocolParams = (tezosProtocol: TezosProtocols): string[] =>
 // tezos-client --endpoint http://localhost:20000 list known addresses
 // tezos-client --endpoint http://localhost:20000 transfer 1.00 from alice to alice
 // tezos-client --endpoint http://localhost:20000 bake for alice
-export const createAccountsParams = (accounts: FlextesaAccounts, amountTz: number = 100): string[] => {
+export const createAccountsParams = (accounts: FlextesaAccounts, amountTz = 100): string[] => {
   const balance: number = amountTz * Math.pow(10, 9); // XTZ in mutez
   const params: string[] = [];
 

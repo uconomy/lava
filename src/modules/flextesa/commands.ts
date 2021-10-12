@@ -40,8 +40,7 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?
     POD_NAME,
     "-p",
     host + ":" + port + ":20000",
-    "-e",
-    "flextesa_node_cors_origin=*",
+    "--env", "flextesa_node_cors_origin=*",
     "tqtezos/flextesa:20210930",
     "flextesa",
     "mini-net",
@@ -68,6 +67,8 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?
   // Setup listeners for errors and close listeners to handle crashed during Flextesa boot
   let stderr = "";
   function onErrored(err: Error) {
+    error("Flextesa running failed with:", err.message);
+
     flextesa.removeListener("close", onClosed);
     stopFlextesa();
     
@@ -78,6 +79,7 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?
     stopFlextesa();
 
     if (code !== 0) {
+      error(`Flextesa exited with code ${code}.`);
       throw new Error(stderr);
     }
   }
