@@ -1,7 +1,7 @@
 export type LIGOVersion = string;
 
 export const MINIMUM_LIGO_VERSION = "0.24.0";
-export const DEFAULT_LIGO_VERSION = "0.25.0";
+export const DEFAULT_LIGO_VERSION = "0.26.0";
 
 export enum LIGOFlavors {
   PascaLIGO = 'pascaligo',
