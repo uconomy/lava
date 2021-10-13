@@ -1,14 +1,7 @@
-export enum LIGOVersions {
-  'next' = "next",
-  '.25'  = "0.25.0",
-  '.24'  = "0.24.0",
-  // '.20'   = "0.20.0", // Deprecated
-  // '.19'   = "0.19.0", // Deprecated
-  // '.18'   = "0.18.0", // Deprecated
-}
+export type LIGOVersion = string;
 
-export const MINIMUM_LIGO_VERSION = LIGOVersions[".24"];
-export const DEFAULT_LIGO_VERSION = LIGOVersions[".25"];
+export const MINIMUM_LIGO_VERSION = "0.24.0";
+export const DEFAULT_LIGO_VERSION = "0.25.0";
 
 export enum LIGOFlavors {
   PascaLIGO = 'pascaligo',
@@ -18,7 +11,7 @@ export enum LIGOFlavors {
 }
 
 export type LigoCompilerOptions = {
-  ligoVersion: LIGOVersions;
+  ligoVersion: LIGOVersion;
   contract?: string;
 }
 
@@ -29,7 +22,7 @@ export type BuildData = {
   updatedAt: string;
   compiler: {
     name: "ligo";
-    version: LIGOVersions;
+    version: LIGOVersion;
   };
   michelson: string;
 }
