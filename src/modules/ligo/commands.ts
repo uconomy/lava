@@ -1,11 +1,13 @@
 import { spawn } from "child_process";
 import path from 'path';
 import os from 'os';
-import { debug, error, getCWD, log } from "../../console";
+import { debug, error, getCWD, log, warn } from "../../console";
 import { ContractsBundle } from "../bundle";
 import { ensureImageIsPresent } from "../docker";
 import { isLigoVersionLT } from "./parameters";
 import { BuildData, LigoCompilerOptions, LIGOVersion } from "./types";
+
+const DOCKER_WARNING = /(?<=warning: ).+/igm;
 
 const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersion, bundle: ContractsBundle): Promise<void> => {
   // eslint-disable-next-line no-async-promise-executor
@@ -117,7 +119,15 @@ const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersion, 
     });
 
     ligo.stderr.on("data", (data) => {
-      const message = data.toString();
+      const message: string = data.toString();
+
+      const warnings = message.match(DOCKER_WARNING);
+      if (warnings?.length) {
+        for (const wMessage of warnings) {
+          warn(`Warning: ${wMessage}`);
+        }
+        return;
+      }
 
       error(message);
       reject(ligo.stderr);
