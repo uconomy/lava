@@ -1,4 +1,5 @@
-import { LIGOFlavors, LIGOVersions } from "../ligo";
+import { LIGOFlavors } from "../ligo";
+import { toLigoVersion } from "../ligo/parameters";
 import { defaultConfig } from "./defaults";
 import { Config } from "./types";
 
@@ -9,14 +10,17 @@ export class ConfigFile {
     this.config = config;
   }
 
-  static getName() {
+  static getName(): string {
     return "config.json";
   }
 
-  validate() {
-    const validLigoVersions = Object.values(LIGOVersions);
-    if (!validLigoVersions.includes(this.config.ligoVersion)) {
-      throw new Error("Invalid LIGO compiler version (ligoVersion). Maybe it's too old? Valid values are " + validLigoVersions.join(", "));
+  validate(): void {
+    try {
+      toLigoVersion(this.config.ligoVersion);
+    } catch (err) {
+      if (err instanceof TypeError) {
+        throw new Error(`Invalid LIGO compiler version (ligoVersion: "${this.config.ligoVersion}"). LIGO version has to be a valid SemVer version or "next".`);
+      }
     }
 
     const validLigoFlavors = Object.values(LIGOFlavors);

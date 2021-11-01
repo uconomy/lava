@@ -1,13 +1,13 @@
 import { spawn } from "child_process";
 import path from 'path';
 import os from 'os';
-import { debug, error, getCWD, log, warn } from "../../console";
+import { debug, error, getCWD, log } from "../../console";
 import { ContractsBundle } from "../bundle";
 import { ensureImageIsPresent } from "../docker";
 import { isLigoVersionLT } from "./parameters";
-import { BuildData, DEFAULT_LIGO_VERSION, LigoCompilerOptions, LIGOVersions } from "./types";
+import { BuildData, LigoCompilerOptions, LIGOVersion } from "./types";
 
-const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions, bundle: ContractsBundle): Promise<void> => {
+const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersion, bundle: ContractsBundle): Promise<void> => {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve, reject) => {
     const ligoImage = `ligolang/ligo:${ligoVersion}`;
@@ -51,14 +51,6 @@ const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions,
       }
     }
 
-    if (ligoVersion === 'next') {
-      warn(`Your preference for the LIGO compiler version is set to "next", which might lead to non-working setups for three reasons:\n` +
-      ` 1) LIGO compiler is downloaded during the project's initial setup. "next" was the latest available LIGO version during the first project setup on this machine. LIGO won't be updated automatically even if new releases are issued;\n`+
-      ` 2) If the CLI interface of LIGO is changed, the toolchain might not be able to compile your contracts anymore;\n` +
-      ` 3) Your contract's code might not be compatible with newer versions of the LIGO compiler.\n`+
-      `\nPlease consider using a specific LIGO compiler version, editing the "ligoVersion" property in config.json. Last supported version is: ${DEFAULT_LIGO_VERSION}`);
-    }
-
     const cwd = getCWD();
 
     const built: BuildData = {
@@ -75,7 +67,10 @@ const _compileFile = async (contractFileName: string, ligoVersion: LIGOVersions,
 
     const mappedFolder = os.platform() === "win32" ? '/cd' : cwd;
 
-    const isOldCLI = isLigoVersionLT(ligoVersion, LIGOVersions[".25"]);
+    /**
+     * Handle both old (0.24.0) and new (0.25.0) LIGO CLI interfaces
+     */
+    const isOldCLI = isLigoVersionLT(ligoVersion, "0.25.0");
     const args = isOldCLI ? [
       "run",
       "--rm",

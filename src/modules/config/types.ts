@@ -1,4 +1,4 @@
-import { LIGOFlavors, LIGOVersions } from "../ligo";
+import { LIGOFlavors, LIGOVersion } from "../ligo";
 import { FaucetAccount, TezosProtocols } from "../tezos";
 
 export enum ToolchainNetworks {
@@ -11,7 +11,7 @@ export type Config = {
   repoName: string;
 
   // LIGO Settings
-  ligoVersion: LIGOVersions;
+  ligoVersion: LIGOVersion;
   preferredLigoFlavor: LIGOFlavors;
 
   // Automatic compilation on old/missing build file when testing/deploying

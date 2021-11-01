@@ -1,16 +1,16 @@
 import { Command } from 'commander';
 
-import { em, debug, getCWD } from "../../console";
+import { em, getCWD } from "../../console";
 import { ContractsBundle } from '../../modules/bundle';
-import { compileWithLigo, LigoCompilerOptions, LIGOVersions } from '../../modules/ligo';
+import { compileWithLigo, DEFAULT_LIGO_VERSION, LigoCompilerOptions } from '../../modules/ligo';
 import { toLigoVersion } from '../../modules/ligo/parameters';
 
-export const addCompileCommand = (program: Command, debugHook: (cmd: Command) => void) => {
+export const addCompileCommand = (program: Command, debugHook: (cmd: Command) => void): void => {
   program
     .command('compile')
     .description('Compile contract(s) using LIGO compiler.')
       .option('-c, --contract <contract>', 'Compile a single smart contract source file')
-      .option('-l, --ligo-version <version>', `Choose a specific LIGO version. Default is "next", available are: ${Object.values(LIGOVersions).join(', ')}`)
+      .option('-l, --ligo-version <version>', `Choose a specific LIGO version. Default is "${DEFAULT_LIGO_VERSION}"`)
       .option('-f, --force', 'Force the compilation avoiding LIGO version warnings')
     .action((options) => {
       compile(options);
@@ -19,7 +19,7 @@ export const addCompileCommand = (program: Command, debugHook: (cmd: Command) =>
 }
 
 // Run LIGO compiler
-export const compile = async (options: Partial<LigoCompilerOptions>) => {
+export const compile = async (options: Partial<LigoCompilerOptions>): Promise<void> => {
   em(`Compiling contracts...\n`);
 
   // Read configfile

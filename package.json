@@ -1,6 +1,6 @@
 {
   "name": "create-tezos-smart-contract",
-  "version": "1.1.9",
+  "version": "1.1.11",
   "description": "Node.js toolset to write, test and deploy Tezos smart contracts",
   "bin": {
     "create-tezos-smart-contract": "./dist/entrypoint.js",
@@ -48,6 +48,7 @@
   "devDependencies": {
     "@types/inquirer": "^7.3.3",
     "@types/jest": "^26.0.24",
+    "@types/semver": "^7.3.8",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
     "ansi-regex": ">=5.0.1",
@@ -55,9 +56,9 @@
     "eslint-config-prettier": "^8.3.0",
     "jest": "^27.0.6",
     "prettier": "^2.3.2",
+    "tmpl": ">=1.0.5",
     "ts-jest": "^27.0.3",
-    "typescript": "^4.3.5",
-    "tmpl": ">=1.0.5"
+    "typescript": "^4.3.5"
   },
   "dependencies": {
     "@taquito/signer": "^10.1.2",
@@ -66,6 +67,7 @@
     "chalk": "^4.1.1",
     "commander": "^8.0.0",
     "inquirer": "^8.1.1",
+    "semver": "^7.3.5",
     "tezos-builder-suite": "^0.2.2"
   }
 }
