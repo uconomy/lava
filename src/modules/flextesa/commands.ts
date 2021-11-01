@@ -1,9 +1,13 @@
 import { spawn, execSync } from "child_process";
 import { em, error, log, debug } from "../../console";
 import { defaultConfig } from "../config";
+import { ensureImageIsPresent } from "../docker";
 import { TezosProtocols } from "../tezos";
 import { createAccountsParams, createProtocolParams, flextesaProtocols } from "./parameters";
 import { FlextesaOptions } from "./types";
+
+// Flextesa image
+const FLEXTESA_IMAGE = "tqtezos/flextesa:20211025";
 
 // Name for the running Docker image
 export const POD_NAME = 'flextesa-sandbox';
@@ -14,8 +18,15 @@ const defaultOptions: FlextesaOptions = defaultConfig.sandbox;
 // This is to avoid printing flextesa full-console in output
 const startLine = "Flextesa: Please enter command:";
 
-export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?: () => void): void => {
+export const startFlextesa = async (_options: Partial<FlextesaOptions>, readyCallback?: () => void): Promise<void> => {
   log(`Preparing Flextesa sandbox...`);
+
+  const image = await ensureImageIsPresent(FLEXTESA_IMAGE);
+  if (!image) {
+    error('Unable to find Flextesa image, compilation failed.');
+    return;
+  }
+
 
   // Merge with defaults
   const options = Object.assign({}, defaultOptions, _options);
@@ -41,7 +52,7 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?
     "-p",
     host + ":" + port + ":20000",
     "--env", "flextesa_node_cors_origin=*",
-    "tqtezos/flextesa:20211025",
+    FLEXTESA_IMAGE,
     "flextesa",
     "mini-net",
     "--genesis-block-hash", options.genesisBlockHash,
