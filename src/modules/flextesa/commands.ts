@@ -41,7 +41,7 @@ export const startFlextesa = (_options: Partial<FlextesaOptions>, readyCallback?
     "-p",
     host + ":" + port + ":20000",
     "--env", "flextesa_node_cors_origin=*",
-    "tqtezos/flextesa:20210930",
+    "tqtezos/flextesa:20211025",
     "flextesa",
     "mini-net",
     "--genesis-block-hash", options.genesisBlockHash,
