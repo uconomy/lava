@@ -1,5 +1,7 @@
 import { spawn, spawnSync } from "child_process";
-import { debug, error, log } from "../../console";
+import { debug, error, log, warn } from "../../console";
+
+export const DOCKER_WARNING = /(?<=warning: ).+/igm;
 
 export const hasImage = (imageName: string): boolean => {
   try {
@@ -70,3 +72,16 @@ export const ensureImageIsPresent = async (imageName: string): Promise<boolean> 
 
   return true;
 };
+
+export const handleDockerWarnings = (message: string, warnFn: (...args: unknown[]) => void = warn): boolean => {
+  const warnings = message.match(DOCKER_WARNING);
+  if (warnings?.length) {
+    for (const wMessage of warnings) {
+      warnFn(`Warning: ${wMessage}`);
+    }
+
+    return true;
+  }
+
+  return false;
+}

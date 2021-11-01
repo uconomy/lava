@@ -1,7 +1,7 @@
 import { spawn, execSync } from "child_process";
 import { em, error, log, debug } from "../../console";
 import { defaultConfig } from "../config";
-import { ensureImageIsPresent } from "../docker";
+import { ensureImageIsPresent, handleDockerWarnings } from "../docker";
 import { TezosProtocols } from "../tezos";
 import { createAccountsParams, createProtocolParams, flextesaProtocols } from "./parameters";
 import { FlextesaOptions } from "./types";
@@ -103,7 +103,13 @@ export const startFlextesa = async (_options: Partial<FlextesaOptions>, readyCal
     
     // Print every message apart from "Flextesa: Please enter command:"
     if (!str.includes(startLine)) {
-      debug(str);
+      // Let docker lib handle warnings
+      const hasWarnings = handleDockerWarnings(str);
+
+      // if warnings weren't there, just print the messages
+      if (!hasWarnings) {
+        debug(str);
+      }
     } else { // But when we reach it, Flextsa is ready
       stderr = "";
 
