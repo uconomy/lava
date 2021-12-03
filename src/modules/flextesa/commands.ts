@@ -1,5 +1,5 @@
 import { spawn, execSync } from "child_process";
-import { em, error, log, debug } from "../../console";
+import { em, error, log, debug, warn } from "../../console";
 import { defaultConfig } from "../config";
 import { ensureImageIsPresent, handleDockerWarnings } from "../docker";
 import { TezosProtocols } from "../tezos";
@@ -7,7 +7,7 @@ import { createAccountsParams, createProtocolParams, flextesaProtocols } from ".
 import { FlextesaOptions } from "./types";
 
 // Flextesa image
-const FLEXTESA_IMAGE = "tqtezos/flextesa:20211025";
+const FLEXTESA_IMAGE = "tqtezos/flextesa:20211119";// "registry.gitlab.com/smondet/flextesa:017a2264-run";
 
 // Name for the running Docker image
 export const POD_NAME = 'flextesa-sandbox';
@@ -16,7 +16,77 @@ const defaultProtocol = TezosProtocols.GRANADA;
 const defaultOptions: FlextesaOptions = defaultConfig.sandbox;
 
 // This is to avoid printing flextesa full-console in output
-const startLine = "Flextesa: Please enter command:";
+const FLEXTESA_INPUT_COMMAND = "Flextesa: Please enter command:";
+const FLEXTESA_MESSAGE_HEADER = /Flextesa:\n/igm;
+const FLEXTESA_WARNING = /.+(?<=warning:( )*(\n)*).+/igm;
+const FLEXTESA_ERROR = /.+(?<=(fatal-error:|error:)( )*(\n)*).+/igm;
+const FLEXTESA_EXIT = "Last pause before the application will Kill 'Em All and Quit.";
+
+const hasFlextesaMessage = (message: string) => {
+  const hasHeader = message.match(FLEXTESA_MESSAGE_HEADER)
+
+  return !!hasHeader && hasHeader.length > 0
+}
+
+const handleFlextesaMessages = (str: string): boolean => {
+  const message = str.replace(FLEXTESA_MESSAGE_HEADER, '')
+
+  if (message.includes(FLEXTESA_EXIT)) {
+    error("Flextesa failed to start all the needed services, now forcing shutdown...")
+    // stopFlextesa();
+
+    return true
+  }
+
+  const lines = message.split('\n')
+
+  const output: {
+    fn?: (...args: string[]) => void,
+    msg: string
+  }[] = [];
+
+  const l = (msg: string, fn?: (...args: string[]) => void) => ({ fn, msg })
+  let globalRenderer = debug
+
+  for (const line of lines) {
+    const warnings = line.match(FLEXTESA_WARNING)
+    const errors = line.match(FLEXTESA_ERROR)
+
+    if (errors?.length) {
+      for(const err of errors) {
+        output.push(l(err, error))
+      }
+
+      globalRenderer = error
+    }
+
+    if (warnings?.length) {
+      for(const warning of warnings) {
+        output.push(l(warning, warn))
+      }
+
+      if (globalRenderer !== error) {
+        globalRenderer = warn
+      }
+    }
+
+    if (!warnings?.length && !errors?.length) {
+      output.push(l(line))
+    }
+  }
+
+  for (const log of output) {
+    const msg = log.msg.replace('\t', '')
+
+    if (log.fn) {
+      log.fn(msg)
+    } else {
+      globalRenderer(msg)
+    }
+  }
+
+  return false
+};
 
 export const startFlextesa = async (_options: Partial<FlextesaOptions>, readyCallback?: () => void): Promise<void> => {
   log(`Preparing Flextesa sandbox...`);
@@ -74,6 +144,7 @@ export const startFlextesa = async (_options: Partial<FlextesaOptions>, readyCal
   debug("docker " + args.join(' '));
 
   const flextesa = spawn("docker", args, opts);
+  let shouldStopLogging = false
 
   // Setup listeners for errors and close listeners to handle crashed during Flextesa boot
   let stderr = "";
@@ -85,13 +156,15 @@ export const startFlextesa = async (_options: Partial<FlextesaOptions>, readyCal
     
     throw err;
   }
-  function onClosed(code: number) {
+  async function onClosed(code: number) {
     flextesa.removeListener("error", onErrored);
-    stopFlextesa();
+
+    if (await isFlextesaRunning()) {
+      stopFlextesa();
+    }
 
     if (code !== 0) {
       error(`Flextesa exited with code ${code}.`);
-      throw new Error(stderr);
     }
   }
   flextesa.on("error", onErrored);
@@ -100,17 +173,25 @@ export const startFlextesa = async (_options: Partial<FlextesaOptions>, readyCal
   flextesa.stderr.on("data", function fn(data) {
     const str = data.toString();
     stderr += str;
-    
-    // Print every message apart from "Flextesa: Please enter command:"
-    if (!str.includes(startLine)) {
-      // Let docker lib handle warnings
-      const hasWarnings = handleDockerWarnings(str);
 
-      // if warnings weren't there, just print the messages
-      if (!hasWarnings) {
-        debug(str);
-      }
+    if (shouldStopLogging) {
+      stderr = "";
+      return
+    }
+    
+    // Print every message as it is, apart from flextesa warnings, errors and input command
+    if (hasFlextesaMessage(str)) {
+      shouldStopLogging = handleFlextesaMessages(str)
+    } else if (!str.startsWith(FLEXTESA_INPUT_COMMAND)) {
+        // Let docker lib handle warnings
+        const hasWarnings = handleDockerWarnings(str);
+
+        // if warnings weren't there, just print the messages
+        if (!hasWarnings) {
+          debug(str);
+        }
     } else { // But when we reach it, Flextsa is ready
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       stderr = "";
 
       // unbind the now unused listeners for boot problems...
@@ -126,7 +207,7 @@ export const startFlextesa = async (_options: Partial<FlextesaOptions>, readyCal
       // Print standard flextesa output
       flextesa.stderr.on("data", (data) => {
         const str = data.toString();
-        error(str.replace(startLine, ""));
+        error(str.replace(FLEXTESA_INPUT_COMMAND, ""));
       });
 
       em(`Tezos sandbox is ready!`);
