@@ -7,7 +7,7 @@ import { createAccountsParams, createProtocolParams, flextesaProtocols } from ".
 import { FlextesaOptions } from "./types";
 
 // Flextesa image
-const FLEXTESA_IMAGE = "tqtezos/flextesa:20211119";// "registry.gitlab.com/smondet/flextesa:017a2264-run";
+const FLEXTESA_IMAGE = "registry.gitlab.com/smondet/flextesa:68d674f9-run"; //"tqtezos/flextesa:20211119";// "registry.gitlab.com/smondet/flextesa:017a2264-run";
 
 // Name for the running Docker image
 export const POD_NAME = 'flextesa-sandbox';
@@ -133,7 +133,7 @@ export const startFlextesa = async (_options: Partial<FlextesaOptions>, readyCal
      * anything, so the header block would be empty and Taquito does not really like it!
      */
     "--time-between-blocks", "2",
-    "--minimal-block-delay", "1",
+    // "--minimal-block-delay", "1",
     "--pause-on-error=true",
     ...accountsParams,
     ...tezosNodeParams
