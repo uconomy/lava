@@ -7,7 +7,7 @@ import { createAccountsParams, createProtocolParams, flextesaProtocols } from ".
 import { FlextesaOptions } from "./types";
 
 // Flextesa image
-const FLEXTESA_IMAGE = "registry.gitlab.com/smondet/flextesa:68d674f9-run"; //"tqtezos/flextesa:20211119";// "registry.gitlab.com/smondet/flextesa:017a2264-run";
+const FLEXTESA_IMAGE = "oxheadalpha/flextesa:test-multi-arch-00";
 
 // Name for the running Docker image
 export const POD_NAME = 'flextesa-sandbox';
