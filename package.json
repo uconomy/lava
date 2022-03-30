@@ -1,6 +1,6 @@
 {
   "name": "create-tezos-smart-contract",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Node.js toolset to write, test and deploy Tezos smart contracts",
   "bin": {
     "create-tezos-smart-contract": "./dist/entrypoint.js",
@@ -68,6 +68,6 @@
     "commander": "^8.0.0",
     "inquirer": "^8.1.1",
     "semver": "^7.3.5",
-    "tezos-builder-suite": "^0.2.2"
+    "tezos-builder-suite": "^0.4.0"
   }
 }
