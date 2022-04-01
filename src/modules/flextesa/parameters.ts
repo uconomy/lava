@@ -8,6 +8,7 @@ export const flextesaProtocols: FlextesaTezosProtocols = {
   [TezosProtocols.FLORENCE]: { hash: "PsFLorenaUUuikDWvMDr6fGBRG8kt3e3D3fHoXK1j1BFRxeSH4i", prefix: "009-PsFLoren", kind: "Florence"},
   [TezosProtocols.GRANADA]: { hash: "PtGRANADsDU8R9daYKAgWnQYAJ64omN1o3KMGVCykShA97vQbvV", prefix: "010-PtGRANAD", kind: "Granada" },
   [TezosProtocols.HANGZHOU]: { hash: "PtHangz2aRngywmSRGGvrcTyMbbdpWdpFKuS4uMWxg2RaH9i1qx", prefix: "011-PtHangz2", kind: "Hangzhou" },
+  [TezosProtocols.ITHACA]: { hash: "Psithaca2MLRFYargivpo7YvUr7wUDqyxrdhC5CQq78mRvimz6A", prefix: "012-Psithaca", kind: "Ithaca" }
 };
 
 export const createProtocolParams = (tezosProtocol: TezosProtocols): string[] => {

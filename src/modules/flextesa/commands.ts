@@ -7,7 +7,7 @@ import { createAccountsParams, createProtocolParams, flextesaProtocols } from ".
 import { FlextesaOptions } from "./types";
 
 // Flextesa image
-const FLEXTESA_IMAGE = "oxheadalpha/flextesa:test-multi-arch-00";
+const FLEXTESA_IMAGE = "oxheadalpha/flextesa:20220321";
 
 // Name for the running Docker image
 export const POD_NAME = 'flextesa-sandbox';
@@ -97,7 +97,6 @@ export const startFlextesa = async (_options: Partial<FlextesaOptions>, readyCal
     return;
   }
 
-
   // Merge with defaults
   const options = Object.assign({}, defaultOptions, _options);
 
@@ -182,7 +181,7 @@ export const startFlextesa = async (_options: Partial<FlextesaOptions>, readyCal
     // Print every message as it is, apart from flextesa warnings, errors and input command
     if (hasFlextesaMessage(str)) {
       shouldStopLogging = handleFlextesaMessages(str)
-    } else if (!str.startsWith(FLEXTESA_INPUT_COMMAND)) {
+    } else if (str.indexOf(FLEXTESA_INPUT_COMMAND) == -1) {
         // Let docker lib handle warnings
         const hasWarnings = handleDockerWarnings(str);
 

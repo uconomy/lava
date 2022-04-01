@@ -12,7 +12,7 @@ import { debug, setCWD, setDebug } from './console';
 const program = new Command();
 
 program
-  .version("0.0.1")
+  .version("1.3.0")
   .option('--debug', 'run the command in debug mode, with a lot more details about it')
   .option('-f, --folder <cwd>', 'change the working directory to the specified folder')
   .hook('preAction', (cmd: Command) => {

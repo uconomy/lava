@@ -50,16 +50,16 @@ With `lava` we'll bring together the latest updates of every single tool for you
 - And, last but not least, Truffle's dedicated Tezos branch is still full of Ethereum content. This made us decide not to contribute on that codebase, but rather to start a new and clean one, always open source.
 
 ## Supported development Tezos protocols
+- Ithaca
 - Hangzhou
-- Granada
 
-__Granada is the default Sandbox protocol version__, but you can easily use Hangzhou by editing `protocol` in the `sandbox` section of `config.json` in your Contracts' repo:
+__Hangzhou is the default Sandbox protocol version__, but you can easily use Ithaca by editing `protocol` in the `sandbox` section of `config.json` in your Contracts' repo:
 ```jsonc
 {
     // ...some other settings
     "sandbox": {
         // ...
-        "protocol": "hangzhou",
+        "protocol": "ithaca",
         // ...
     },
     // ...

@@ -13,7 +13,7 @@ import { Config } from "./types";
   
   // LIGO Settings
   ligoVersion: DEFAULT_LIGO_VERSION,
-  preferredLigoFlavor: LIGOFlavors.PascaLIGO,
+  preferredLigoFlavor: LIGOFlavors.JsLIGO,
 
   // Automatic compilation on old/missing build file
   autoCompile: false,
@@ -25,7 +25,7 @@ import { Config } from "./types";
   sandbox: {
     host: "localhost",
     port: 20000,
-    protocol: TezosProtocols.GRANADA,
+    protocol: TezosProtocols.HANGZHOU,
     genesisBlockHash: "random",
     accounts: {
       alice: {
