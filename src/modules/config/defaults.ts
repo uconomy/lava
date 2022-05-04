@@ -4,13 +4,13 @@ import { Config } from "./types";
 
 /**
  * Default settings
- * 
+ *
  * Some of these settings are expected to change in the init configurator.
  * For the remote networks, we use Giganode by default, read more at https://mainnet-tezos.giganode.io
  */
  export const defaultConfig: Config = {
   repoName: "tezos-smart-contract",
-  
+
   // LIGO Settings
   ligoVersion: DEFAULT_LIGO_VERSION,
   preferredLigoFlavor: LIGOFlavors.JsLIGO,
@@ -48,7 +48,7 @@ import { Config } from "./types";
 
   /**
    * Newtork settings
-   * 
+   *
    * These settings make up three aliases for the network you'll probably need while developing a
    * smart contract on Tezos:
    * - sandbox:   the local sandboxed network used to run unit tests and to test contract deploying
@@ -64,7 +64,7 @@ import { Config } from "./types";
     testnet: {
       host: "https://testnet-tezos.giganode.io",
       port: 443,
-      faucet: null, // You can get one at https://faucet.tzalpha.net
+      faucet: null, // You can get one at https://teztnets.xyz
     },
 
     mainnet: {

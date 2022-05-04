@@ -37,7 +37,7 @@ export type Config = {
 
   /**
    * Newtork settings
-   * 
+   *
    * These settings make up three aliases for the network you'll probably need while developing a
    * smart contract on Tezos:
    * - sandbox:   the local sandboxed network used to run unit tests and to test contract deploying
@@ -52,7 +52,7 @@ export type Config = {
     [ToolchainNetworks.TESTNET]: { // Remember you need to pass --testnet to test or deploy commands to run on this network
       host: string;
       port: number;
-      faucet: null | FaucetAccount; // You can get one at https://faucet.tzalpha.net
+      faucet: null | FaucetAccount; // You can get one at https://teztnets.xyz
     },
 
     [ToolchainNetworks.MAINNET]: { // This network can only be used to deploy, no tests allowed here

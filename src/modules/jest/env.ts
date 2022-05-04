@@ -26,7 +26,7 @@ export const setupJestEnv = async (): Promise<CustomJestGlobals> => {
       if (config.networks.testnet.faucet && isFaucet(config.networks.testnet.faucet)) {
         signer = config.networks.testnet.faucet;
       } else {
-        throw new Error('ERROR: When running tests in testnet, a Faucet is mandatory.\nPlease get a Faucet account from https://faucet.tzalpha.net and add it in testnet config in config.json');
+        throw new Error('ERROR: When running tests in testnet, a Faucet is mandatory.\nPlease get a Faucet account from https://teztnets.xyz/ and add it in testnet config in config.json');
       }
     } else if (TEZOS_NETWORK !== ToolchainNetworks.SANDBOX) {
       throw new Error(`ERROR: The specified network "${TEZOS_NETWORK}" is not available. Please use either sandbox or testnet.`);
