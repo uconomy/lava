@@ -28,7 +28,7 @@ const _setSigner = async (signer: TezosSigner) => {
   }
 
   if (isFaucet(signer)) {
-    await importKey(Tezos, signer.email, signer.password, signer.mnemonic.join(' '), signer.secret);
+    await importKey(Tezos, signer.email, signer.password, signer.mnemonic.join(' '), signer.activation_code);
   } else {
     Tezos.setProvider({
       signer: new InMemorySigner(signer),

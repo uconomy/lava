@@ -99,6 +99,17 @@ export const deployContract = async (bundle: ContractsBundle, options: DeployCom
   const buildFile = await bundle.readBuildFile(contractName);
   const config = await bundle.readConfigFile();
 
+  if (options.network == "testnet") {
+    if (config.networks.testnet.faucet){
+      if ((config.networks.testnet.faucet as any).secret) {
+        error(`ERROR: Invalid Faucet account for Testnet found in config.json. The Faucet you're using has an outdated structure.`);
+        warn("Please provide a new Faucet account your can obtain at: https://teztnets.xyz/");
+
+        process.exit(0);
+      }
+    }
+  }
+
   // Validate build file
   switch(bundle.isBuildValid(sourcePath, hash, buildFile)) {
     case BuildErrorCodes.MICHELSON_MISSING: 
