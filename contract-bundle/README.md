@@ -44,7 +44,7 @@ You can find tests in the `test` folder.
 
 ### Unit testing
 
-Unit testing is the first step for checking contracts' code correctness. As the name says, they're designed to che check small portions (units) of code.
+Unit testing is the first step for checking contracts' code correctness. As the name says, they're designed to check small portions (units) of code.
 As Smart Contracts are stateful, doing unit testing with it can the tricky.
 
 For this reason, we implemented another command
@@ -68,9 +68,9 @@ yarn test
 and you'll see your tests being performed. If you want the local sandbox to be started and stopped automatically every test run, please set `autoSandbox: true` in your *config.json*.
 
 ### End-to-end (E2E) Testing
-End-to-end testing is tought to be simulating user interaction with your smart contract. This is to ensure that the expected usage of your contract produces the expexted storage/operations in the Tezos blockchain.
+End-to-end testing is thought to be simulating user interaction with your smart contract. This is to ensure that the expected usage of your contract produces the expected storage/operations in the Tezos blockchain.
 
-This is done on a single contract instead of one for every single test. For this reason, you can let the toolset deploy a contract for you in the sandbox, or you can deploy it in a testnet with the `deploy` commnd and then tell the e2e testing command to use that one.
+This is done on a single contract instead of one for every single test. For this reason, you can let the toolset deploy a contract for you in the sandbox, or you can deploy it in a testnet with the `deploy` command and then tell the e2e testing command to use that one.
 
 E2E testing is as simple as
 ```bash
@@ -99,7 +99,7 @@ or, with Yarn
 ```bash
 yarn deploy
 ```
-It will guide you through all the step needed to Deploy the smart contract.
+It will guide you through all the steps needed to Deploy the smart contract.
 Pass `--network=testnet` or `--network=mainnet` to deploy in the specific network.
 
 Have some nice Tezos coding!
